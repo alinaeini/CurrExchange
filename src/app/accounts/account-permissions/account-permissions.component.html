@@ -1,0 +1,274 @@
+<section class="content">
+    <div class="body_scroll">
+      <div class="card serch-card" >
+        <div class="body">
+          <div class="container-fluid">
+            <div class="row clearfix">
+              <div class="col-lg-12">
+                <div class="card">
+                    <mat-horizontal-stepper>
+                        <mat-step label="تعیین نقش کاربر" state="userType">
+                          <!-- <div class="form-group text-center">
+                            <h3 class="text-danger"><span>لطفا نقش کاربران را مشخص بفرمایید </span></h3>
+                          </div> -->
+                          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong> توجه !</strong>&nbsp;&nbsp;&nbsp;لطفا نقش کاربران را مشخص بفرمایید 
+                              <div class="text-left">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="table-border table-secondary div-table">
+                            <table mat-table [dataSource]="this.dataSource" matSort *ngIf="this.dataSource !== null"
+                              class="table table-striped table-hover align-middle" >
+                            <!-- row Column -->
+                            <ng-container matColumnDef="row">
+                              <th mat-header-cell *matHeaderCellDef> ردیف </th>
+                              <td mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+                            </ng-container>
+                              <!-- firstName Column -->
+                              <ng-container matColumnDef="firstName">
+                                <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort">
+                                 نام 
+                                </th>
+                                <td mat-cell *matCellDef="let element" >
+                                  {{ element.firstName}} 
+                                </td>
+                              </ng-container>
+           
+                              <!-- LastName Column -->
+                              <ng-container matColumnDef="lastName">
+                                <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                                  نام خانوادگی
+                                </th>
+                                <td mat-cell *matCellDef="let element" >
+                                  {{ element.lastName}}
+                                </td>
+                              </ng-container>
+
+                              <!-- userName Column -->
+                              <ng-container matColumnDef="userName">
+                                <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                                  نام کاربری
+                                </th>
+                                <td mat-cell *matCellDef="let element" >
+                                  {{ element.userName}}
+                                </td>
+                              </ng-container>
+
+                              <!-- userRole Column -->
+                              <ng-container matColumnDef="roleName">
+                                <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                                  نقش کاربری
+                                </th>
+                                <td mat-cell *matCellDef="let element" >
+                                <div class="form-group">
+                                    <select  class="form-control" [(ngModel)]="element.roleName" [value]="0" >
+                                      <option [value]="item.id"  *ngFor="let item of items">{{item.name}}</option>
+                                   </select>
+                                </div>
+                                </td>
+                              </ng-container>
+                              <!-- id Column -->
+                              <ng-container matColumnDef="id">
+                                <th mat-header-cell  *matHeaderCellDef></th>
+                                <td mat-cell *matCellDef="let element">
+                                  {{ element.id }}
+                                </td>
+                              </ng-container>
+
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                            </table>
+                          </div>
+                          <hr>
+                          <div class="float-left">
+                            <button  mat-button matStepperNext class="d-flex justify-content-end">بعدی</button>
+                          </div>
+                        </mat-step>
+
+                        <mat-step label="تعیین دسترسی به منوها" state="userPermissions">
+                          <!-- <div class="form-group text-center">
+                            <h3 class="text-danger"><span>لطفا تعیین دسترسی به منوها برای هر کاربر را مشخص بفرمایید </span></h3>
+                          </div> -->
+                          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong> توجه !</strong>&nbsp;&nbsp;&nbsp;لطفا تعیین دسترسی به منوها برای هر کاربر را مشخص بفرمایید 
+                              <div class="text-left">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row clearfix">
+                            <div class=" col-md-12">
+                              <div class = "form-group">
+                                <!-- <select  class="form-control" [(ngModel)]="userId"  [disabled]="rolePermissions.length === 0" (change)="onChangeUserRoleUnselect($event.target.value)" [value]="'item.id'" >
+                                  <option [value]="item.id"  *ngFor="let item of rolePermissions" >{{item.firstName}} {{item.lastName}}</option>
+                                </select> -->
+                                <table mat-table
+                                [dataSource]="rolePermissions" multiTemplateDataRows
+                                class="mat-elevation-z8">
+
+                                <!-- firstName Column -->
+                                <ng-container matColumnDef="firstName">
+                                  <th mat-header-cell   *matHeaderCellDef  class="headersort">
+                                        نام   
+                                  </th>
+                                  <td mat-cell *matCellDef="let element; let i = index" >
+                                    {{ element.firstName}} 
+                                  </td>
+                                </ng-container>
+                                <!-- LastName Column -->
+                                <ng-container matColumnDef="lastName">
+                                  <th mat-header-cell  *matHeaderCellDef  class="headersort" >
+                                    نام خانوادگی
+                                  </th>
+                                  <td mat-cell *matCellDef="let element; let i = index" >
+                                    {{ element.lastName}}
+                                  </td>
+                                </ng-container>
+
+                                <!-- operation Column -->
+                                <ng-container matColumnDef="operation">
+                                  <th mat-header-cell  *matHeaderCellDef  class="headersort" >
+                                    عملیات
+                                  </th>
+                                  <td mat-cell *matCellDef="let element ;let i = index">
+                                    <div class="operation-inline">
+                                      <!-- <mat-checkbox (click)="selectedItem(element.id)"></mat-checkbox> -->
+                                      <button
+                                        mat-icon-button
+                                        color="accent"
+                                          title="جزییات"
+                                          (click)="expandTree(element.id);">
+                                        <mat-icon>list</mat-icon>
+                                      </button>
+                                      <button
+                                      mat-icon-button
+                                      color="primary"
+                                        title="ثبت"
+                                        (click)="addToRolePermissionList(element.id, treeData)">
+                                      <mat-icon>save</mat-icon>
+                                    </button>
+                                    </div>
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="expandedDetail">
+                                  <td mat-cell *matCellDef="let element" style="height: 0px;" [attr.colspan]="displayedColumnspage2.length">
+                                    <div class="example-element-detail"
+                                         [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'">
+                                          <div class = "form-group">
+                                            <mat-tree [dataSource]="permissionData" style="background-color: transparent;" [treeControl]="treeControl">
+                                              <mat-tree-node *matTreeNodeDef="let node" [disabled]="rolePermissions.length === 0" matTreeNodeToggle matTreeNodePadding>
+                                                <button mat-icon-button disabled></button>
+                                                <mat-checkbox class="checklist-leaf-node"
+                                                              [checked]="node.selected"
+                                                              (change)="todoLeafItemSelectionToggle(node)">{{node.displayTitle}}</mat-checkbox>
+                                              </mat-tree-node>
+                                            </mat-tree>
+                                        </div>
+                                      <!-- <div class="example-element-description">
+                                        {{element.description}}
+                                        <span class="example-element-description-attribution"> -- Wikipedia </span>
+                                      </div> -->
+                                    </div>
+                                  </td>
+                                </ng-container>
+  
+
+                                <!-- id Column -->
+                                <ng-container matColumnDef="id">
+                                  <th mat-header-cell  *matHeaderCellDef></th>
+                                  <td mat-cell *matCellDef="let element">
+                                    {{ element.id }}
+                                  </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnspage2"></tr>
+                                <tr mat-row *matRowDef="let element; columns: displayedColumnspage2;"
+                                    class="example-element-row"
+                                    [class.example-expanded-row]="expandedElement === element"
+                                    >
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                                </table>
+                                <!-- <mat-selection-list class="form-control" #roles (selectionChange)="selectedValueChange($event, roles.selectedOptions)" [multiple]="false" >
+                                  <mat-list-option *ngFor="let item of rolePermissions"  [value]="item.id">
+                                    <span>{{item.firstName}} {{item.lastName}}</span>
+                                  </mat-list-option>
+                                  <button mat-icon-button >text</button>
+                                </mat-selection-list> -->
+                                <!-- <p>
+                                  Option selected: {{roles.selectedOptions.selected[0]?.value}}
+                                </p> -->
+                              </div>
+                            </div>
+
+
+                          </div>
+                          <!-- <div>
+                            <button class="btn btn-success btn-block" mat-button [disabled]="rolePermissions.length === 0" (click)="submitPermission()">اضافه</button>
+                          </div> -->
+                          <hr>
+                          <div class="float-left">
+                            <button mat-button matStepperPrevious>قبلی</button>
+                            <button mat-button matStepperNext>بعدی</button>
+                          </div>
+                        </mat-step>
+                        <mat-step label="اعمال تغییرات دسترسی" state="saveChanges" > 
+                          <!-- <div class="form-group alert alert-primary" role="alert">
+                            <span> در این مرحله با فشردن کلید ذخیره  , تمام تغییرات اعمال شده در پایگاه داده ذخیره خواهد شد.</span>
+                          </div> -->
+                          <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">مرحله آخر </h4>
+                            <span> در این مرحله با فشردن کلید ذخیره  , تمام تغییرات اعمال شده در پایگاه داده ذخیره خواهد شد.</span>
+                            <hr>
+                            <p class="mb-0">چنانچه بعد از فشردن کلید ذخیره , تغییرات جدیدی در دسترسی کاربران اعمال شود مجددا باید تمام مراحل انجام شود .</p>
+                          </div>
+                          <hr>
+                          <div>
+                            <button class="btn btn-primary btn-block" mat-button matStepperNext (click)="submitRolesAndPermission()">ذخیره اطلاعات </button>
+                          </div>
+                        </mat-step>
+                      
+                        <!-- Icon overrides. -->
+                        <ng-template matStepperIcon="userType">
+                          <mat-icon>account_circle</mat-icon>
+                        </ng-template>
+                        <ng-template matStepperIcon="userPermissions">
+                          <mat-icon>lock</mat-icon>
+                        </ng-template>
+                        <ng-template matStepperIcon="saveChanges">
+                            <mat-icon>save_alt</mat-icon>
+                        </ng-template>
+                        
+                    </mat-horizontal-stepper>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+  </section>
+
+
+  <ngx-loading
+    [show]="isLoading"
+    [config]="{ animationType: ngxLoadingAnimationTypes.wanderingCubes }"
+  ></ngx-loading>
+
+  <swal
+  #sweetAlert
+  title="خطا"
+  text=""
+  icon="error"
+  Height="20px"
+  Width="30px"
+  confirmButtonText="قبول"
+  [showCancelButton]="false"
+  [focusCancel]="false"
+>
+</swal>

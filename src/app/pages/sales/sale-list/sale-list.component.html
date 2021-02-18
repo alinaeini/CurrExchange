@@ -1,0 +1,376 @@
+<section class="content">
+    <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              <font style="vertical-align: inherit"
+                ><font style="vertical-align: inherit">لیست  فروش ارزی</font></font
+              >
+            </h2>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="index.html"
+                  ><i class="zmdi zmdi-home"></i
+                  ><font style="vertical-align: inherit"
+                    ><font style="vertical-align: inherit"> مدیریت فروش ارز</font></font
+                  ></a
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit">لیست فروش ارزی</font></font
+                >
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-icon mobile_menu" type="button">
+              <i class="zmdi zmdi-sort-amount-desc"></i>
+            </button>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/'"  >
+              <i class="zmdi zmdi-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card"  *ngIf="filterCurrSales.currencySale !== null && filterCurrSales.currencySale.length > 0">
+        <mat-drawer-container autosize style="height: 800px;">
+          <mat-drawer #drawer  mode="side" >
+              <div class="body"  >
+                <div class="card-header text-primary">
+                  <strong> <mat-icon>compare_arrows</mat-icon> تعیین فیلتر بروی لیست فروش </strong>
+                </div>
+              
+                <div class="margin-top"></div>  
+
+                <div class="form-control">
+
+                    <mat-form-field  class="form-control">
+                      <mat-label>لیست کاگزاران</mat-label>
+                      <mat-select (value)="filterCurrSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                        <mat-option value=10>10</mat-option>
+                        <mat-option value=25>25</mat-option>
+                        <mat-option value=50>50</mat-option>
+                        <mat-option value=100>100</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  <br>
+
+                  <div class="margin-top"></div>  
+                  <mat-slide-toggle> تو حسابی</mat-slide-toggle><br>
+                  <mat-slide-toggle> نقدی</mat-slide-toggle>
+                  <mat-divider></mat-divider>
+                  <br>
+
+                  <mat-form-field class="form-control">
+                    <mat-label>لیست مشتریان</mat-label>
+                    <mat-select (value)="filterCurrSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                      <mat-option value=10>10</mat-option>
+                      <mat-option value=25>25</mat-option>
+                      <mat-option value=50>50</mat-option>
+                      <mat-option value=100>100</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-divider></mat-divider>
+                  <br>
+                  <mat-slide-toggle> فروش های در مجموع با سود</mat-slide-toggle><br>
+                  <mat-slide-toggle> فروش های در مجموع با ضرر</mat-slide-toggle>
+                  <mat-divider></mat-divider>
+                  <br>
+
+                  <div class="form-group form-float input-group">
+                    <input class="form-control ng-pristine" type="text" 
+                      placeholder="از تاریخ فروش"    #datepickerInputFrom/>
+                      <!-- <p class = "text-danger"  >
+                          لطفا تاریخ فروش  را وارد کنید
+                      </p> -->
+                  
+
+                  <ng-persian-datepicker
+                  [input]="datepickerInputFrom"
+                  [uiTheme]="'default'"
+                  [timeEnable]="false"
+                  [dateFormat]="'jYYYY-jMM-jDD'"
+                  [dateInitValue] ="true"
+                  [dateOnSelect] ="selectedValuesFromPickupDate"
+                  [dateInitValue]="false" >
+                  </ng-persian-datepicker>
+
+                  
+                    <input class="form-control ng-pristine"  type="text" 
+                      placeholder="تا تاریخ فروش"  #datepickerInputTo/>
+                      <!-- <p class = "text-danger"  >
+                          لطفا تاریخ فروش  را وارد کنید
+                      </p> -->
+                  
+
+                  <ng-persian-datepicker
+                  [input]="datepickerInputTo"
+                  [uiTheme]="'default'"
+                  [timeEnable]="false"
+                  [dateFormat]="'jYYYY-jMM-jDD'"
+                  [dateInitValue] ="true"
+                  [dateOnSelect] ="selectedValuesFromPickupDate"
+                  [dateInitValue]="false" >
+                  </ng-persian-datepicker>
+                  </div>
+                  <mat-divider></mat-divider>
+                  <br>
+                    <!-- <div class="accordion-group">
+                      <div class="accordion-heading">
+                        <a
+                          class="accordion-toggle"
+                          data-toggle="collapse"
+                          href="#filterPrices"
+                          >قیمت <b class="caret"></b
+                        ></a>
+                      </div>
+                      <p>
+                        <span>قیمت از :
+                        <mat-slider  min="1"  max="100000" (change)="setStartPrice($event)" ></mat-slider>
+                        {{this.filterProducts.startPrice  | moneyFormatter: 'IRR'}}</span>
+                      </p>
+                      <p>
+                        <span>قیمت تا :
+                        <mat-slider  [min]="this.filterProducts.startPrice"  max="10000000" (change)="setEndPrice($event)" ></mat-slider>
+                        {{this.filterProducts.endPrice  | moneyFormatter: 'IRR'}}</span>
+                      </p>
+                    </div> -->
+                  <div class="accordion-group">
+                    <div class="accordion-heading">
+                      <a
+                        class="accordion-toggle"
+                        data-toggle="collapse"
+                        >قیمت فروش درهم<b class="caret"></b
+                      ></a>
+                    </div>
+                    <p>
+                      <span>قیمت از :
+                      <mat-slider  min="40000"  max="100000"   (change)="setStartPrice($event)"></mat-slider>
+                      {{12000000  | number}} ریال</span>
+                    </p>
+                    <p>
+                      <span>قیمت تا :
+                      <mat-slider  [min]="120"  max="20000" ></mat-slider>
+                      {{13000000 | number}} ریال</span>
+                    </p>
+                  </div>
+                </div>
+              
+                <button class="btn  btn-warning waves-effect btn-block"   type="submit" >
+                  <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> پاک کردن همه فیلتر ها </font></font> 
+                </button>
+                <button class="btn  btn-success waves-effect btn-block"   type="submit" >
+                  <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> اعمال فیلتر </font></font> 
+                </button>
+            </div>
+        </mat-drawer>
+            <div class="body">
+              <div class="form-group row">
+                <div class="col-2" >
+                </div>
+                <button type="button" mat-button (click)="checkFilterToggle(); drawer.toggle();">
+                  <span  class="text-success" *ngIf="!this.checkToggle"><mat-icon>menu</mat-icon> مشاهده منوی فیلتر گزارشات </span> 
+                  <span  class="text-warning" *ngIf="this.checkToggle"><mat-icon>last_page</mat-icon> بستن منوی فیلتر گزارشات</span> 
+                </button>
+                <mat-form-field class="col-6">
+                  <mat-label>جستجو بر اساس کارگزار , مشتری ,  ....</mat-label>
+                  <input  matInput  placeholder="متن خود را وارد کنید " (keyup)="onKey($event)"/>
+                </mat-form-field>
+                  <button  mat-mini-fab  color="gray" class="btn btn-primary mb-1" (click)="searchButton()">
+                    <mat-icon>search</mat-icon>
+                  </button>
+
+
+              </div>
+              <div class="container-fluid">
+                <div class="row clearfix">
+                  <div class="col-lg-12">
+                    <div class="card">
+                      <div class="table-border table-secondary div-table">
+                        <table mat-table [dataSource]="this.dataSource" matSort *ngIf="this.dataSource !== null"
+                          class="table table-striped table-hover align-middle" >
+                          <!-- row Column -->
+                          <ng-container matColumnDef="row">
+                            <th mat-header-cell *matHeaderCellDef> ردیف </th>
+                            <td mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                          </ng-container>
+                          
+                          <!-- currSaleDate Column -->
+                          <ng-container matColumnDef="currSaleDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                              تاریخ فروش
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.currSaleDate | jalaliPipe }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+    
+                          <!-- brokerName Column -->
+                          <ng-container matColumnDef="brokerName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                             کارگزار
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.brokerName  }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+    
+                          <!-- price Column -->
+                          <ng-container matColumnDef="price">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                              مقدار (درهم)
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.price | number  }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+    
+                          
+                          <!-- customerName Column -->
+                          <ng-container matColumnDef="customerName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                              مشتری
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.customerName }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> جمع کل  </td>
+                          </ng-container>
+    
+                          <!-- profitLossAmount Column -->
+                          <ng-container matColumnDef="profitLossAmount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                              سود و زیان
+                            </th>
+                            <td mat-cell *matCellDef="let element" [class]="element.profitLossAmount >= 0  ? 'color-green-price' : 'text-danger'">
+                              <span *ngIf="element.profitLossAmount >= 0"> {{ element.profitLossAmount | number}} ریال</span>
+                              <span *ngIf="0 > element.profitLossAmount"> ({{ element.profitLossAmount *-1 | number}}) ریال </span>
+                             </td>
+                             <td mat-footer-cell *matFooterCellDef> {{sumProfitLossAmount() | number }} ریال </td>
+                          </ng-container>
+    
+                          <!-- salePricePerUnit Column -->
+                          <ng-container matColumnDef="salePricePerUnit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                             نرخ درهم فروش رفته
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.salePricePerUnit | number  }} ریال
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+    
+                          <!-- transferPrice Column -->
+                          <ng-container matColumnDef="transferPrice">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                              کارمزد انتقال
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.transferPrice | number  }} درهم
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> {{sumTransferPrice() | number }} درهم</td>
+                          </ng-container>
+    
+                          <!-- operation Column -->
+                          <ng-container matColumnDef="operation">
+                            <th mat-header-cell *matHeaderCellDef  class="headersort" >
+                              عملیات
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="operation-inline">
+                                <button
+                                mat-icon-button
+                                color="primary"
+                                (click)="exCodeDetailByCurrId(element.id)"
+                                title="جزییات اظهارنامه"  >
+                                <mat-icon>filter_list</mat-icon>
+                              </button>
+                                <button
+                                  mat-icon-button
+                                  color="accent"
+                                  (click)="piDetailByCurrId(element.id)"
+                                   title="جزییات پیش فاکتورها(PI)" >
+                                   <mat-icon> business_center </mat-icon>
+                                </button>
+                              </div>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+    
+                          <!-- id Column -->
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell  *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                              {{ element.id }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>  </td>
+                          </ng-container>
+      
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                          <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="margin-bottom">
+                      <div class="d-inline-block col-9">
+                        <ul class="pagination pagination-primary m-b-0">
+                          <li class="page-item" (click)="setFirstPage()">
+                            <a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a>
+                          </li>
+                          <li
+                            class="page-item"   [ngClass]="{ active: page === filterCurrSales.activePage }"   (click)="setPage(page)"   *ngFor="let page of pages">
+                            <a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">{{  page }}</font></font></a   >
+                          </li>
+                          <!-- <li class="page-item active"><a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ page }}</font></font></a></li> -->
+                          <li class="page-item" (click)="setLastPage()">
+                            <a class="page-link"
+                              ><i class="zmdi zmdi-arrow-right"></i ></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="d-inline-block ">
+                          <mat-form-field appearance="fill">
+                            <mat-label>نمایش نتایج</mat-label>
+                            <mat-select (value)="filterCurrSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                              <mat-option value=10>10</mat-option>
+                              <mat-option value=25>25</mat-option>
+                              <mat-option value=50>50</mat-option>
+                              <mat-option value=100>100</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </mat-drawer-container>
+
+
+      </div>
+      <div class="card serch-card" *ngIf="filterCurrSales.currencySale === null || filterCurrSales.currencySale.length === 0">
+        <div class="body">
+          <div class="form-group text-center">
+            <h2 class="text-primary">هیچ PI فروخته شده ایی در سیستم وجود ندارد</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  
+
+
+
+  
+
+  

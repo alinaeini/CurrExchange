@@ -1,0 +1,36 @@
+<div class="authentication">
+  <div class="container">
+      <div class="row">
+          <div class=" col text-center card auth_form">
+            <!-- <form class="card auth_form"   > -->
+                  <div class="header">
+                      <img class="logo" src="assets/images/logo.png" style="width: 250px;" alt="">
+                      <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> سیستم فروش ارز نیمایی</font></font></h5>
+                  </div>
+                  <div class="body">
+                    <div class="d-flex justify-content-center">
+                       <button class="btn btn-primary bold btn-lg btn-large " [disabled]="click"  (click)="submitActiveUser()" id="submitActive" type="submit"  tabindex="7" id="submit">
+                             فعالسازی کاربر
+                        </button>
+                     </div>
+                  </div>
+              <!-- </form> -->
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+<swal #sweetAlert
+title="توجه"
+text=""
+icon="success"
+Height="20px"
+Width="20px"
+confirmButtonText = "ورود به برنامه"
+[showCancelButton]="false"
+[focusCancel]="false">
+</swal>

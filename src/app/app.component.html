@@ -1,0 +1,115 @@
+<!-- <app-sidebar [ngStyle]="{'display':this.user === null ? 'none' : 'block' }" ></app-sidebar> -->
+<div  [hidden] = "currentUser === null" >
+
+    <div class="navbar-right" >
+        <ul class="navbar-nav">
+            <!-- <li><a href="#search" class="main_search" title="Search..."><i class="zmdi zmdi-search"></i></a></li> -->
+            <li class="dropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle" title="App" data-toggle="dropdown" role="button"><i class="zmdi zmdi-apps"></i></a>
+                <ul class="dropdown-menu slideUp2">
+                    <li class="header">صفخات پر کاربرد</li>
+                    <li class="body">
+                        <ul class="menu app_sortcut list-unstyled">
+                            <li>
+                                <a [routerLink]="'/calander'">
+                                    <div class="icon-circle mb-2 bg-green"><i class="zmdi zmdi-calendar"></i></div>
+                                    <p class="mb-0">تقویم</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://rahavard365.com/asset/2/%d8%af%d9%84%d8%a7%d8%b1" target="_blank">
+                                    <div class="icon-circle mb-2 bg-red"><i class="zmdi zmdi-trending-up"></i></div>
+                                    <p class="mb-0">نمودار قیمت دلار روزانه</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://mex.co.ir/" target="_blank">
+                                    <div class="icon-circle mb-2 bg-blue"><i class="zmdi zmdi-library"></i></div>
+                                    <p class="mb-0">صرافی ملی</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.tgju.org/currency" target="_blank">
+                                    <div class="icon-circle mb-2 bg-grey"><i class="zmdi zmdi-leak"></i></div>
+                                    <p class="mb-0">شبکه اطلاع رسانی ارز</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://weather.com/fa-IR/forecast/air-quality/l/03f54a7ed5ff350ccb2288152ea14760d39532bd31776ae1641e231b71342d25" target="_blank">
+                                    <div class="icon-circle mb-2 bg-yellow"><i class="zmdi zmdi-globe"></i></div>
+                                    <p class="mb-0">کیفیت هوای امروز تهران</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="image-gallery.html">
+                                    <div></div>
+                                    <p class="mb-0"></p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" [ngStyle]="{'display':(currentUser != null) && currentUser.userRole === 'Admin' ? 'block' : 'none' }">
+                <a href="javascript:void(0);" class="dropdown-toggle" title="مجوز دسترسی به کاربران" data-toggle="dropdown" role="button"><i class="zmdi zmdi-lock-open"></i></a>
+                <ul class="dropdown-menu slideUp2">
+                    <li class="header" >مجوز دسترسی </li>
+                    <li class="body">
+                        <ul class="menu app_sortcut list-unstyled">
+                            <!-- <li>
+                                <a [routerLink]="'/login/user-roles'">
+                                    <div class="icon-circle mb-2 bg-green"><i class="zmdi zmdi-account-add"></i></div>
+                                    <p class="mb-0">تعیین نقش کاربران </p>
+                                </a>
+                            </li> -->
+                            <!-- <li>
+                                <a href="javascript:void(0);">
+                                    <div class="icon-circle mb-2 bg-grey"><i class="zmdi zmdi-account"></i></div>
+                                    <p class="mb-0">مشاهده لیست کاربران</p>
+                                </a>
+                            </li> -->
+                            <li>
+                                <a [routerLink]="'login/user-permissions'">
+                                    <div class="icon-circle mb-2 bg-blue"><i class="zmdi zmdi-folder-person"></i></div>
+                                    <p class="mb-0">مجوز دسترسی کاربران </p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div></div>
+                                    <p class="mb-0"></p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a  (click)="logOutUser()" class="mega-menu" title="خروج از سیستم "><i class="zmdi zmdi-power"></i></a></li>
+
+        </ul>
+    </div>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar" >
+        <div class="navbar-brand">
+            <button class="btn-menu ls-toggle-btn" type="button"><i class="zmdi zmdi-menu"></i></button>
+            <a href="http://www.arasjey.com/index.html" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/logo-icon.png" width="25" alt="Aero"><span class="h6">شرکت پالایش نفت جی ارس</span>
+            </a>
+        </div>
+        <div class="menu" >
+            <app-menu-items [currentUser]="currentUser" ></app-menu-items>
+        </div>
+    </aside>
+</div>
+
+
+
+<router-outlet></router-outlet>
+
+
+
+
+
+
+
+

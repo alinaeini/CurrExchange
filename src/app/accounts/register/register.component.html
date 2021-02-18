@@ -1,0 +1,129 @@
+<div class="authentication">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-sm-12">
+        <form  [formGroup]="registerForm" (ngSubmit)="submitRegisterForm()" class="card auth_form ">
+          <div class="header">
+            <img class="logo" src="assets/images/logo.png" style="width: 250px" alt=""/><br>
+            <h6>
+              <span><font style="vertical-align: inherit">
+                <font style="vertical-align: inherit" >ثبت نام پرسنل جدید در سیستم</font></font>
+              </span>
+             </h6>
+          </div>
+          <div class="body">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="نام" formControlName="firstName" />
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="zmdi zmdi-account-box-o"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.firstName.errors?.required
+            && registerForm.controls.firstName.touched" >
+             لطفا نام  را وارد کنید
+           </p>
+           <p class = "text-danger" *ngIf="registerForm.controls.firstName.errors?.maxlength
+             && registerForm.controls.firstName.touched" >
+             {{ErrorCaractersisMoreThanMax}}
+           </p>
+            <div class="input-group mb-3">
+              <input  type="text" class="form-control" placeholder="نام خانوادگی"  formControlName="lastName"/>
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="zmdi zmdi-account-box-o"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.lastName.errors?.required
+            && registerForm.controls.lastName.touched" >
+             لطفا نام خانوادگی را وارد کنید
+           </p>
+           <p class = "text-danger" *ngIf="registerForm.controls.lastName.errors?.maxlength
+             && registerForm.controls.lastName.touched" >
+             {{ErrorCaractersisMoreThanMax}}
+           </p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="نام کاربری" formControlName="userName" />
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="zmdi zmdi-account-circle"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.userName.errors?.required
+             && registerForm.controls.userName.touched" >
+              لطفا نام کاربری را وارد کنید
+            </p>
+            <p class = "text-danger" *ngIf="registerForm.controls.userName.errors?.maxlength
+              && registerForm.controls.userName.touched" >
+              {{ErrorCaractersisMoreThanMax}}
+            </p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="ایمیل" formControlName="email"/>
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="zmdi zmdi-email"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.email.errors?.required
+                && registerForm.controls.email.touched" >
+              لطفا ایمیل را وارد کنید
+             </p>
+             <p class = "text-danger" *ngIf="registerForm.controls.email.errors?.maxlength
+               && registerForm.controls.email.touched" >
+               {{ErrorCaractersisMoreThanMax}}
+             </p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" type="password" placeholder="کلمه عبور" formControlName="password"/>
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.password.errors?.required &&
+                registerForm.controls.password.touched" >
+                لطفا کلمه عبور را وارد کنید
+            </p>
+            <p class = "text-danger" *ngIf="registerForm.controls.password.errors?.maxlength
+                && registerForm.controls.password.touched" >
+                {{ErrorCaractersisMoreThanMax}}
+            </p>
+            <div class="input-group mb-3">
+              <input
+                type="text" class="form-control" type="password"  placeholder="تکرار کلمه عبور"  formControlName="confirmPassword"/>
+              <div class="input-group-append">
+                <span class="input-group-text" ><i class="zmdi zmdi-lock"></i></span>
+              </div>
+            </div>
+            <p class = "text-danger" *ngIf="registerForm.controls.confirmPassword.errors?.required &&
+                registerForm.controls.confirmPassword.touched" >
+                لطفا تکرار کلمه عبور را وارد کنید
+            </p>
+            <p class = "text-danger" *ngIf="registerForm.controls.confirmPassword.errors?.maxlength
+                && registerForm.controls.confirmPassword.touched" >
+                {{ErrorCaractersisMoreThanMax}}
+            </p>
+              <div class="input-group  mb-3">
+                   <button class="btn btn-primary bold btn-lg btn-block" [disabled]="registerForm.invalid" id="submit" type="submit"  tabindex="7" id="submit">
+                          ثبت نام
+                   </button>
+              </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-lg-8 col-sm-12">
+        <div class="card">
+          <img src="assets/images/signup.svg" alt="ثبت نام" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="isLoading" [config]="{animationType: ngxLoadingAnimationTypes.wanderingCubes}"
+></ngx-loading>
+
+<swal #sweetAlert
+title="اطلاعات تکراری"
+text="نام کاربری وارد شده :  {{this.registerForm.controls.userName.value}} تکراری میباشد"
+icon="error"
+Height="20px"
+Width="30px"
+confirmButtonText = "قبول"
+[showCancelButton]="false"
+[focusCancel]="false">
+</swal>

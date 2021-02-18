@@ -1,0 +1,39 @@
+<ul class="list" >
+    <li>
+        <div class="user-info" >
+            <a class="image" [routerLink]="'/profile'"><img src="assets/images/profile_av.jpg" ></a>
+            <div class="detail" >
+                <h6>{{currentUser?.firstName }}  {{currentUser?.lastName}} ,عزیز</h6>
+                <small>به سیستم مدیریت فروش ارز خوش آمدید</small>
+            </div>
+        </div>
+    </li>
+    
+<div *ngIf="currentUser!== null && currentUser.userPermissions.length > 0 ">
+    <li *ngFor="let parent of currentUser?.userPermissions;index as i">
+        <div [hidden]="parent.detaiList === null || parent.detaiList.length === 0">
+                <div [ngSwitch]="i+1" >
+                    <a  href="#subMenu{{i}}" data-toggle="collapse" aria-expanded="true" [title]="parent.parentName" class="dropdown-toggle">
+                    <i *ngSwitchCase="1" class="zmdi zmdi-view-dashboard"></i>
+                    <i *ngSwitchCase="2" class="zmdi zmdi-folder"></i>
+                    <i *ngSwitchCase="3" class="zmdi zmdi-gamepad"></i>
+                    <i *ngSwitchCase="4" class="zmdi zmdi-money-box"></i>
+                    <i *ngSwitchCase="5" class="zmdi zmdi-puzzle-piece"></i>
+                    <i *ngSwitchCase="6" class="zmdi zmdi-ticket-star"></i>
+                    <i *ngSwitchCase="7" class="zmdi zmdi-mall"></i>
+                    <i *ngSwitchCase="8" class="zmdi zmdi-widgets"></i>
+                    <i *ngSwitchCase="9" class="zmdi zmdi-language-python"></i>
+                    <i *ngSwitchDefault class="zmdi zmdi-view-dashboard"></i>
+                    <span>{{parent.parentName}}</span></a>
+                </div>
+                
+            <ul class="collapse list ul-menu" id="subMenu{{i}}">
+                <li *ngFor="let itemSelected of parent.detaiList">
+                    <a   [routerLink]="itemSelected.accessLink" [title]="itemSelected.persianName"><i class="zmdi zmdi-blur-circular"></i> <span> {{itemSelected.persianName}}</span></a> 
+                </li>
+            </ul>
+        </div>
+    </li>
+</div>
+
+</ul>

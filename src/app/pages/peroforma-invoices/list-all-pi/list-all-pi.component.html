@@ -1,0 +1,228 @@
+<section class="content">
+    <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              <font style="vertical-align: inherit"
+                ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
+              >
+            </h2>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="index.html"
+                  ><i class="zmdi zmdi-home"></i
+                  ><font style="vertical-align: inherit"
+                    ><font style="vertical-align: inherit"> مدیریت فروش ارز</font></font
+                  ></a
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
+                >
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-icon mobile_menu" type="button">
+              <i class="zmdi zmdi-sort-amount-desc"></i>
+            </button>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/'"  >
+              <i class="zmdi zmdi-arrow-right"></i></a>
+            <!-- <a
+              class="btn btn-success btn-icon float-right"
+              [routerLink]="'/'"
+              ><i class="zmdi zmdi-plus"></i
+            ></a> -->
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card" *ngIf="filterPi.piRemaind !== null && filterPi.piRemaind.length > 0 ">
+        <div class="body">
+          <div class="form-group row">
+              <div class="col-2" >
+              </div>
+            <mat-form-field class="col-7">
+              <mat-label>جستجو بر اساس  PI....</mat-label>
+              <input persianNumber
+                matInput
+                placeholder="متن خود را وارد کنید "
+                (keyup)="onKey($event)"
+              />
+            </mat-form-field>
+  
+            
+              <button
+                mat-mini-fab
+                color="gray"
+                class="btn btn-primary mb-1 "
+                (click)="searchButton()" >
+                <mat-icon>search</mat-icon>
+              </button>
+           
+          </div>
+
+        <!-- <div class="form-group row">
+          <div class="col-2" >
+          </div>
+          <mat-radio-group class="col-7" title="لطفا نوع محاسبه اظهارنامه(ها) رو مشخص کنید"  >
+            <mat-radio-button (change)="clickOption($event)"  value="1">فقط مانده دارها را نمایش بده</mat-radio-button>
+            <mat-radio-button (change)="clickOption($event)" value="2">همه</mat-radio-button>
+          </mat-radio-group>
+         
+        </div> -->
+          <div class="container-fluid">
+            <div class="row clearfix">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="table-border table-secondary div-table">
+                    <table mat-table [dataSource]="this.dataSource" matSort *ngIf="this.dataSource !== null"
+                      class="table table-striped table-hover align-middle" >
+                    
+                      <!-- piCode Column -->
+                      <ng-container matColumnDef="piCode">
+                        <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort">
+                          کد PI
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.piCode }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+                        <!-- piDate Column -->
+                        <ng-container matColumnDef="piDate">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          تاریخ PI
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.piDate | date:'y/MM/dd'}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+            
+                      <!-- basePrice Column -->
+                      <ng-container matColumnDef="basePrice">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          نرخ درهم پایه (ریال)
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.basePrice | number  }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>جمع کل </td>
+                      </ng-container>
+  
+                      <!-- totalPrice Column -->
+                      <ng-container matColumnDef="totalPrice">
+                        <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort" >
+                          مقدار فروش رفته (درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" >
+                          {{ element.totalPrice| number }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() |number}}</td>
+                      </ng-container>
+
+  
+                      <!-- soldPrice Column -->
+                      <ng-container matColumnDef="soldPrice">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          پرداختی مشتری (درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element"  >
+                          {{ element.soldPrice | number}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalSoldPrice() |number}}</td>
+                      </ng-container>
+  
+                      <!-- remaindPrice Column -->
+                      <ng-container matColumnDef="remaindPrice">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          مانده (درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-danger" >
+                          {{ element.remaindPrice | number}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalRemaind() |number}}</td>
+                      </ng-container>
+              
+                      <!-- operation Column -->
+                      <ng-container matColumnDef="operation">
+                        <th mat-header-cell *matHeaderCellDef  class="headersort" >
+                          عملیات
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div class="operation-inline">
+                            <button
+                              mat-icon-button
+                              color="primary"
+                              (click) ="showDetailExDec(element.id)"
+                               title="مشاهده جزییات فروش" >
+                              <mat-icon>filter_list</mat-icon>
+                            </button>
+                            <!-- <button
+                              mat-icon-button
+                              color="warn"
+                              (click)="deleteFromList(element.id )" disabled title="حذف" >
+                              <mat-icon>delete</mat-icon>
+                            </button> -->
+                          </div>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>  </td>
+                      </ng-container>
+                      
+                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="margin-bottom">
+                  <div class="d-inline-block col-9">
+                    <ul class="pagination pagination-primary m-b-0">
+                      <li class="page-item" (click)="setFirstPage()">
+                        <a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a>
+                      </li>
+                      <li
+                        class="page-item"   [ngClass]="{ active: page === filterPi.activePage }"   (click)="setPage(page)"   *ngFor="let page of pages">
+                        <a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit">
+                            <font style="vertical-align: inherit">{{  page }}</font></font></a   >
+                      </li>
+                      <!-- <li class="page-item active"><a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ page }}</font></font></a></li> -->
+                      <li class="page-item" (click)="setLastPage()">
+                        <a class="page-link"
+                          ><i class="zmdi zmdi-arrow-right"></i ></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="d-inline-block col-3 ">
+                      <mat-form-field appearance="fill" class="form-control">
+                        <mat-label>نمایش نتایج</mat-label>
+                        <mat-select (value)="filterPi.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                          <mat-option  value=10>10</mat-option>
+                          <mat-option value=25>25</mat-option>
+                          <mat-option value=50>50</mat-option>
+                          <mat-option value=100>100</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card" *ngIf="filterPi.piRemaind === null || filterPi.piRemaind.length === 0">
+          <div class="body">
+              <div class="form-group text-center">
+                 <h2 class="text-primary">هیچ PI  که مشتری کامل پرداخت نکرده در سیستم وجود ندارد</h2>
+              </div>
+          </div>
+      </div>
+    </div>
+
+  </section>
+  
+
+

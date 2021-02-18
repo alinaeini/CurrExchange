@@ -1,0 +1,29 @@
+.mat-form-field {
+    height: 40px;
+}
+
+.margin-bottom{
+    margin-bottom: 15px;
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-right: 50px;
+  }
+
+  tr.mat-header-row{
+    background-color:#8b8f94
+  }
+  .mat-footer-row {
+    background-color:#8b8f94!important;
+    font-weight: bold;
+  }
+
+//   .mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>*:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing{
+//     background-color: #f0f0f0;
+//   }
+font{
+  font-family: 'IRANSansDN';
+}
+.disable-span{
+  background-color: #e9ecef;
+    color: gray;
+}

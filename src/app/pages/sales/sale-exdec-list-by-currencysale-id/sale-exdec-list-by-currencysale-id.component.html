@@ -1,0 +1,203 @@
+<section class="content">
+    <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              <font style="vertical-align: inherit"
+                ><font style="vertical-align: inherit">لیست  تعهدات ارزی</font></font
+              >
+            </h2>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="index.html"
+                  ><i class="zmdi zmdi-home"></i
+                  ><font style="vertical-align: inherit"
+                    ><font style="vertical-align: inherit"> مدیریت فروش ارز</font></font
+                  ></a
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit"> لیست  تعهدات ارزی بر اساس فروش</font></font
+                >
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-icon mobile_menu" type="button">
+              <i class="zmdi zmdi-sort-amount-desc"></i>
+            </button>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/sales/sale-list'"  >
+              <i class="zmdi zmdi-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card" *ngIf="filterExDecSales.currencySaleExDecs !== null && filterExDecSales.currencySaleExDecs.length > 0">
+        <div class="body">
+          <div class="form-group row">
+              <div class="col-2" >
+              </div>
+            <mat-form-field class="col-7">
+              <mat-label>جستجو بر اساس سریال کارگزار , مشتری , شماره کوتاژ صادراتی ....</mat-label>
+              <input persianNumber  matInput  placeholder="متن خود را وارد کنید " (keyup)="onKey($event)"/>
+            </mat-form-field>
+              <button  mat-mini-fab  color="gray" class="btn btn-primary mb-1" (click)="searchButton()">
+                <mat-icon>search</mat-icon>
+              </button>
+          </div>
+          <div class="container-fluid">
+            <div class="row clearfix">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="table-border table-secondary div-table">
+                    <table mat-table [dataSource]="this.dataSource" matSort *ngIf="this.dataSource !== null"
+                      class="table table-striped table-hover align-middle" >
+                      <!-- exDecCode Column -->
+                      <ng-container matColumnDef="exDecCode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                         شماره کوتاژ
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.exDecCode }}
+                        </td>
+                      </ng-container>
+                      
+                         <!-- exDecCode Column -->
+                         <ng-container matColumnDef="exDecPrice">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                           مقدار کوتاژ(درهم)
+                          </th>
+                          <td mat-cell *matCellDef="let element" [class]="element.exDecPrice === element.price ? 'text-info' : 'text-danger'">
+                            {{ element.exDecPrice | number }}
+                          </td>
+                        </ng-container>                   
+                      <!-- currSaleDate Column -->
+                      <ng-container matColumnDef="currSaleDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          تاریخ فروش
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.currSaleDate | jalaliPipe }}
+                        </td>
+                      </ng-container>
+
+                      <!-- brokerName Column -->
+                      <ng-container matColumnDef="brokerName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                         کارگزار
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.brokerName  }}
+                        </td>
+                      </ng-container>
+
+                      <!-- price Column -->
+                      <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          مقدار فروش رفته از کوتاژ(درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center" [class]="element.exDecPrice === element.price ? 'text-info' : 'text-danger'">
+                          {{ element.price | number  }}
+                        </td>
+                      </ng-container>
+
+                      
+                      <!-- customerName Column -->
+                      <ng-container matColumnDef="customerName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          مشتری
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.customerName }}
+                        </td>
+                      </ng-container>
+
+                  
+                      <!-- id Column -->
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell  *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.id }}
+                        </td>
+                      </ng-container>
+  
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="margin-bottom">
+                  <div class="d-inline-block col-9">
+                    <ul class="pagination pagination-primary m-b-0">
+                      <li class="page-item" (click)="setFirstPage()">
+                        <a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a>
+                      </li>
+                      <li
+                        class="page-item"   [ngClass]="{ active: page === filterExDecSales.activePage }"   (click)="setPage(page)"   *ngFor="let page of pages">
+                        <a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit">
+                            <font style="vertical-align: inherit">{{  page }}</font></font></a   >
+                      </li>
+                      <!-- <li class="page-item active"><a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ page }}</font></font></a></li> -->
+                      <li class="page-item" (click)="setLastPage()">
+                        <a class="page-link"
+                          ><i class="zmdi zmdi-arrow-right"></i ></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="d-inline-block ">
+                      <mat-form-field appearance="fill">
+                        <mat-label>نمایش نتایج</mat-label>
+                        <mat-select (value)="filterExDecSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                          <mat-option value=10>10</mat-option>
+                          <mat-option value=25>25</mat-option>
+                          <mat-option value=50>50</mat-option>
+                          <mat-option value=100>100</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card" *ngIf="filterExDecSales.currencySaleExDecs === null || filterExDecSales.currencySaleExDecs.length === 0">
+        <div class="body">
+          <div class="form-group text-center">
+            <h2 class="text-primary">هیچ سریال اظهارنامه فروخته شده ایی در سیستم وجود ندارد</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  
+
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>نمایش </mat-label>
+    <select matNativeControl required>
+      <option value="10">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </mat-form-field> -->
+  <ngx-loading
+    [show]="isLoadingData"
+    [config]="{ animationType: ngxLoadingAnimationTypes.wanderingCubes }"
+  ></ngx-loading>
+  
+  <swal
+    #sweetAlert
+    title="سوال"
+    text="آیا میخواهید اظهارنامه مورد نظر حذف شود ؟"
+    icon="warning"
+    Height="20px"
+    Width="30px"
+    confirmButtonText="بلی"
+    cancelButtonText="خیر"
+    [showCancelButton]="true"
+  >
+  </swal>
+  

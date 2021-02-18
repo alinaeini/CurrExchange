@@ -1,0 +1,133 @@
+<section class="content">
+    <div class="body_scroll">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">اعتبار سنجی فرم</font></font></h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="'/home-user'"><i class="zmdi zmdi-home"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> مدیریت فروش ارز</font></font></a></li>
+                        <li class="breadcrumb-item"><a ><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">کارزار</font></font></a></li>
+                        <li class="breadcrumb-item active"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ویرایش اطلاعات کارگزاری</font></font></li>
+                    </ul>
+                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/brokers'"  >
+                        <i class="zmdi zmdi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+  
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong><font style="vertical-align: inherit;"></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ویرایش اطلاعات کارگزاری</font></font></h2>
+                        </div>
+                        <div class="body">
+  
+                          <div class="alert alert-success" role="alert" *ngIf="isLoadingSuccess">
+                            مشتری با موفتقیت در سیستم ثبت شد
+                          </div>
+                           <form id="form_validation" [formGroup]="brokerFrom" (ngSubmit)="submitBrokerForm()">
+                                <div class="form-group form-float">
+                                    <input type="text" class="form-control"  placeholder="نام" formControlName="name">
+                                </div>
+                                <p class = "text-danger" *ngIf="brokerFrom.controls.name.errors?.required
+                                && brokerFrom.controls.name.touched" >
+                                 لطفا نام  را وارد کنید
+                               </p>
+                               <p class = "text-danger" *ngIf="brokerFrom.controls.name.errors?.maxlength
+                               && brokerFrom.controls.name.touched" >
+                                           {{ErrorCaractersisMoreThanMax}}
+                                </p>
+
+                                <div class="form-group form-float">
+                                    <input type="text" class="form-control"  placeholder="شهرت"  formControlName="title">
+                                </div>
+                                <p class = "text-danger" *ngIf="brokerFrom.controls.title.errors?.required
+                                && brokerFrom.controls.title.touched" >
+                                 لطفا شهرت صرافی  را وارد کنید
+                               </p>
+                               <p class = "text-danger" *ngIf="brokerFrom.controls.title.errors?.maxlength
+                               && brokerFrom.controls.title.touched" >
+                                           {{ErrorCaractersisMoreThanMax}}
+                                </p>
+
+                                <div class="form-group form-float">
+                                    <input type="text" class="form-control" placeholder="تلفن" formControlName="tel">
+                                </div>
+                                <p class = "text-danger" *ngIf="brokerFrom.controls.tel.errors?.required
+                                && brokerFrom.controls.tel.touched" >
+                                 لطفا تلفن  را وارد کنید
+                               </p>
+                               <p class = "text-danger" *ngIf="brokerFrom.controls.tel.errors?.maxlength  && brokerFrom.controls.tel.touched" >
+                                   {{ErrorCaractersisMoreThanMax}}
+                                </p>
+
+                                <div class="form-group form-float">
+                                    <input type="number" class="form-control" placeholder="نرخ کارمزد نقدی" formControlName="serviceChargeAccount">
+                                </div>
+                                <p class = "text-danger" *ngIf="brokerFrom.controls.serviceChargeAccount.errors?.required
+                                && brokerFrom.controls.serviceChargeAccount.touched" >
+                                 لطفا نرخ کارمزد نقدی  را وارد کنید
+                               </p>
+
+                                <div class="form-group form-float">
+                                    <input type="number" class="form-control" placeholder="نرخ کارمزد توحسابی" formControlName="serviceChargeCash">
+                                </div>
+                                <p class = "text-danger" *ngIf="brokerFrom.controls.serviceChargeCash.errors?.required
+                                    && brokerFrom.controls.serviceChargeCash.touched" >
+                                        لطفا نرخ کارمزد توحسابی  را وارد کنید
+                                </p> 
+
+                            <div class="form-group form-float">
+                                <textarea name="description" cols="30" rows="5" placeholder="آدرس" formControlName="address" class="form-control no-resize" ></textarea>
+                             </div>
+                             <p class = "text-danger" *ngIf="brokerFrom.controls.address.errors?.required
+                             && brokerFrom.controls.address.touched" >
+                              لطفا آدرس  را وارد کنید
+                            </p>
+                            <p class = "text-danger" *ngIf="brokerFrom.controls.address.errors?.maxlength
+                                 && brokerFrom.controls.address.touched" >
+                                             {{ErrorCaractersisMoreThanMax}}
+                             </p>
+
+                            <div class="form-group form-float">
+                                <textarea name="description" cols="30" rows="5" placeholder="شرح" class="form-control no-resize" formControlName="description"></textarea>
+                            </div>
+                            <p class = "text-danger" *ngIf="brokerFrom.controls.description.errors?.required
+                            && brokerFrom.controls.description.touched" >
+                             لطفا شرح  را وارد کنید
+                           </p>
+                           <p class = "text-danger" *ngIf="brokerFrom.controls.description.errors?.maxlength
+                                && brokerFrom.controls.description.touched" >
+                                            {{ErrorCaractersisMoreThanMax}}
+                            </p>
+
+                                <button class="btn  btn-primary waves-effect btn-block"   type="submit" >
+                                  <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ثبت </font></font> 
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  <ngx-loading [show]="isLoading" [config]="{animationType: ngxLoadingAnimationTypes.wanderingCubes}"
+></ngx-loading>
+
+  <swal #sweetAlert
+  title="خطا"
+  text=""
+  icon="error"
+  Height="20px"
+  Width="30px"
+  confirmButtonText = "قبول"
+  [showCancelButton]="false"
+  [focusCancel]="false">
+  </swal>
+  
