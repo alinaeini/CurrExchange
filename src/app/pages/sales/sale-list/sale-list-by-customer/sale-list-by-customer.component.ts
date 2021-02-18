@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FilterCurrSaleDto } from 'src/app/DTOs/Sale/FilterCurrSaleDto';
+import { FilterCurrSaleCustomerListDto } from 'src/app/DTOs/Sale/FilterCurrSaleDto';
 import { CurrencySalesService } from 'src/app/Services/currency-sales.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class SaleListByCustomerComponent implements OnInit {
     'operation'
   ];
   dataSource = new MatTableDataSource(null);
-  filterCurrSales: FilterCurrSaleDto = new FilterCurrSaleDto(
+  filterCurrSales: FilterCurrSaleCustomerListDto = new FilterCurrSaleCustomerListDto(
     1,
     0,
     0,
@@ -83,11 +83,11 @@ export class SaleListByCustomerComponent implements OnInit {
   // }
 
   sumProfitLossAmount() {
-    return this.filterCurrSales.currencySale.map(t => t.profitLossAmount).reduce((acc, value) => acc + value, 0);
+    return this.filterCurrSales.entities.map(t => t.profitLossAmount).reduce((acc, value) => acc + value, 0);
   }
 
   sumTransferPrice() {
-    return this.filterCurrSales.currencySale.map(t => t.transferPrice).reduce((acc, value) => acc + value, 0);
+    return this.filterCurrSales.entities.map(t => t.transferPrice).reduce((acc, value) => acc + value, 0);
   }
 
 
@@ -103,7 +103,7 @@ export class SaleListByCustomerComponent implements OnInit {
         // console.log(this.filterCurrSales.currencySale);
         
         //data
-        this.dataSource = new MatTableDataSource(this.filterCurrSales.currencySale);
+        this.dataSource = new MatTableDataSource(this.filterCurrSales.entities);
         
         this.dataSource.sort = this.sort;
         //end data

@@ -104,20 +104,7 @@ export class SalesComponent implements OnInit {
     // });
     this.getBroker();
 
-    this.customerService.getCustomerList().subscribe((customerListResult) => {
-      if (customerListResult != null) {
-        this.customers = customerListResult;
-      } else {
-        this.customerService.getCustomerListService().subscribe((res) => {
-          if (res.status === 'Success') {
-            this.customerService.setCustomerList(res.data);
-            this.customerService.getCustomerList().subscribe((customerList) => {
-              this.customers = customerList;
-            });
-          }
-        });
-      }
-    });
+this.getCustomers()
     // this.exdecService.getExDecList().subscribe((exDecListResult) => {
     //   if (exDecListResult != null) {
     //     this.exDecs = exDecListResult;
@@ -134,6 +121,34 @@ export class SalesComponent implements OnInit {
       startWith(''),
       map((value) => this._filter(value))
     );
+  }
+  getBroker() {
+    this.brokers=[];
+        this.brokerService.getBrokerListService().subscribe((res) => {
+          if (res.status === 'Success') {
+            this.brokerService.setBrokerList(res.data);
+            this.brokerService.getBrokerList().subscribe((brokerList) => {
+              this.brokers = brokerList;
+            });
+          }
+        });
+
+}
+  getCustomers() {
+    this.customerService.getCustomerList().subscribe((customerListResult) => {
+      if (customerListResult != null) {
+        this.customers = customerListResult;
+      } else {
+        this.customerService.getCustomerListService().subscribe((res) => {
+          if (res.status === 'Success') {
+            this.customerService.setCustomerList(res.data);
+            this.customerService.getCustomerList().subscribe((customerList) => {
+              this.customers = customerList;
+            });
+          }
+        });
+      }
+    });
   }
 
   private _filter(value: string): CustomerDto[] {
@@ -388,18 +403,7 @@ export class SalesComponent implements OnInit {
     }, 1000);
   }
 
-  getBroker() {
-    this.brokers=[];
-        this.brokerService.getBrokerListService().subscribe((res) => {
-          if (res.status === 'Success') {
-            this.brokerService.setBrokerList(res.data);
-            this.brokerService.getBrokerList().subscribe((brokerList) => {
-              this.brokers = brokerList;
-            });
-          }
-        });
-
-}
+ 
 
 getExDecIsNotSoldwithObservable() {
   this.exDecs =[];

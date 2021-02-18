@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="card serch-card"  *ngIf="filterCurrSales.currencySale !== null && filterCurrSales.currencySale.length > 0">
+      <div class="card serch-card"  *ngIf="filterCurrSales.entities !== null && filterCurrSales.entities.length > 0">
         <mat-drawer-container autosize style="height: 800px;">
           <mat-drawer #drawer  mode="side" >
               <div class="body"  >
@@ -47,97 +47,69 @@
 
                     <mat-form-field  class="form-control">
                       <mat-label>لیست کاگزاران</mat-label>
-                      <mat-select (value)="filterCurrSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
-                        <mat-option value=10>10</mat-option>
-                        <mat-option value=25>25</mat-option>
-                        <mat-option value=50>50</mat-option>
-                        <mat-option value=100>100</mat-option>
+                      <mat-select  [(ngModel)]="filterCurrSales.brokerId"  >
+                        <mat-option  *ngFor="let item of brokers" [value]="item.id">{{item.title }}</mat-option>
                       </mat-select>
                     </mat-form-field>
                   <br>
 
                   <div class="margin-top"></div>  
-                  <mat-slide-toggle> تو حسابی</mat-slide-toggle><br>
-                  <mat-slide-toggle> نقدی</mat-slide-toggle>
+                  <mat-slide-toggle [(ngModel)]="filterCurrSales.isAccount"> تو حسابی</mat-slide-toggle><br>
+                  <mat-slide-toggle [(ngModel)]="filterCurrSales.isCashed"> نقدی</mat-slide-toggle>
                   <mat-divider></mat-divider>
                   <br>
 
                   <mat-form-field class="form-control">
                     <mat-label>لیست مشتریان</mat-label>
-                    <mat-select (value)="filterCurrSales.takeEntity" (selectionChange)="selectedValue($event.value)" >
-                      <mat-option value=10>10</mat-option>
-                      <mat-option value=25>25</mat-option>
-                      <mat-option value=50>50</mat-option>
-                      <mat-option value=100>100</mat-option>
+                    <mat-select  [(ngModel)]="filterCurrSales.customerId"  >
+                      <mat-option  *ngFor="let item of customers" [value]="item.id"> {{item.name }} ({{item.title }})</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <br>
 
                   <mat-divider></mat-divider>
                   <br>
-                  <mat-slide-toggle> فروش های در مجموع با سود</mat-slide-toggle><br>
-                  <mat-slide-toggle> فروش های در مجموع با ضرر</mat-slide-toggle>
+                  <!-- <mat-slide-toggle [(ngModel)]="filterCurrSales.isProfitAmount"> فروش های در مجموع با سود</mat-slide-toggle><br>
+                  <mat-slide-toggle [(ngModel)]="filterCurrSales.isLossAmount">  فروش های در مجموع با ضرر</mat-slide-toggle>
                   <mat-divider></mat-divider>
-                  <br>
+                  <br> -->
 
                   <div class="form-group form-float input-group">
-                    <input class="form-control ng-pristine" type="text" 
-                      placeholder="از تاریخ فروش"    #datepickerInputFrom/>
-                      <!-- <p class = "text-danger"  >
-                          لطفا تاریخ فروش  را وارد کنید
-                      </p> -->
-                  
-
-                  <ng-persian-datepicker
-                  [input]="datepickerInputFrom"
-                  [uiTheme]="'default'"
-                  [timeEnable]="false"
-                  [dateFormat]="'jYYYY-jMM-jDD'"
-                  [dateInitValue] ="true"
-                  [dateOnSelect] ="selectedValuesFromPickupDate"
-                  [dateInitValue]="false" >
-                  </ng-persian-datepicker>
-
-                  
-                    <input class="form-control ng-pristine"  type="text" 
-                      placeholder="تا تاریخ فروش"  #datepickerInputTo/>
-                      <!-- <p class = "text-danger"  >
-                          لطفا تاریخ فروش  را وارد کنید
-                      </p> -->
-                  
-
-                  <ng-persian-datepicker
-                  [input]="datepickerInputTo"
-                  [uiTheme]="'default'"
-                  [timeEnable]="false"
-                  [dateFormat]="'jYYYY-jMM-jDD'"
-                  [dateInitValue] ="true"
-                  [dateOnSelect] ="selectedValuesFromPickupDate"
-                  [dateInitValue]="false" >
-                  </ng-persian-datepicker>
+                      <div class="form-group form-float ">
+                        <label >از تاریخ فروش</label>
+                          <input class="form-control ng-pristine" [(ngModel)]="dateFrom" type="text" 
+                           #datepickerInputFrom/>
+                          <!-- <p class = "text-danger"  >
+                              لطفا تاریخ فروش  را وارد کنید
+                          </p> -->
+                          <ng-persian-datepicker
+                          [input]="datepickerInputFrom"
+                          [uiTheme]="'default'"
+                          [timeEnable]="false"
+                          [dateFormat]="'jYYYY-jMM-jDD'"
+                          [dateInitValue] ="true"
+                          [dateInitValue]="false" >
+                          </ng-persian-datepicker>
+                      </div>
+                      <div class="form-group form-float">
+                        <label >تا تاریخ فروش</label>
+                          <input class="form-control ng-pristine" [(ngModel)]="dateTo" type="text" 
+                           #datepickerInputTo/>
+                          <ng-persian-datepicker
+                          [input]="datepickerInputTo"
+                          [uiTheme]="'default'"
+                          [timeEnable]="false"
+                          [dateFormat]="'jYYYY-jMM-jDD'"
+                          [dateInitValue] ="true"
+                          [dateInitValue]="false" >
+                          </ng-persian-datepicker>
+                          <p class = "text-danger" *ngIf="dateFrom !== '' &&  dateTo ==='' " >
+                              لطفا تا تاریخ فروش  را وارد کنید
+                          </p>
+                      </div>
                   </div>
                   <mat-divider></mat-divider>
                   <br>
-                    <!-- <div class="accordion-group">
-                      <div class="accordion-heading">
-                        <a
-                          class="accordion-toggle"
-                          data-toggle="collapse"
-                          href="#filterPrices"
-                          >قیمت <b class="caret"></b
-                        ></a>
-                      </div>
-                      <p>
-                        <span>قیمت از :
-                        <mat-slider  min="1"  max="100000" (change)="setStartPrice($event)" ></mat-slider>
-                        {{this.filterProducts.startPrice  | moneyFormatter: 'IRR'}}</span>
-                      </p>
-                      <p>
-                        <span>قیمت تا :
-                        <mat-slider  [min]="this.filterProducts.startPrice"  max="10000000" (change)="setEndPrice($event)" ></mat-slider>
-                        {{this.filterProducts.endPrice  | moneyFormatter: 'IRR'}}</span>
-                      </p>
-                    </div> -->
                   <div class="accordion-group">
                     <div class="accordion-heading">
                       <a
@@ -148,21 +120,21 @@
                     </div>
                     <p>
                       <span>قیمت از :
-                      <mat-slider  min="40000"  max="100000"   (change)="setStartPrice($event)"></mat-slider>
-                      {{12000000  | number}} ریال</span>
+                      <mat-slider  min="50000" max="110000"   [(ngModel)]="this.filterCurrSales.fromSaleBasePrice"></mat-slider>
+                      {{this.filterCurrSales.fromSaleBasePrice  | number}} ریال</span>
                     </p>
                     <p>
                       <span>قیمت تا :
-                      <mat-slider  [min]="120"  max="20000" ></mat-slider>
-                      {{13000000 | number}} ریال</span>
+                      <mat-slider  [min]="this.filterCurrSales.fromSaleBasePrice" max="110000" [(ngModel)]="this.filterCurrSales.toSaleBasePrice"   ></mat-slider>
+                      {{this.filterCurrSales.toSaleBasePrice | number}} ریال</span>
                     </p>
                   </div>
                 </div>
               
-                <button class="btn  btn-warning waves-effect btn-block"   type="submit" >
+                <button class="btn  btn-warning waves-effect btn-block"   type="button" (click)="clearFilters()" >
                   <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> پاک کردن همه فیلتر ها </font></font> 
                 </button>
-                <button class="btn  btn-success waves-effect btn-block"   type="submit" >
+                <button class="btn  btn-success waves-effect btn-block"   type="button" (click)="filterGenerate()">
                   <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> اعمال فیلتر </font></font> 
                 </button>
             </div>
@@ -357,7 +329,7 @@
 
 
       </div>
-      <div class="card serch-card" *ngIf="filterCurrSales.currencySale === null || filterCurrSales.currencySale.length === 0">
+      <div class="card serch-card" *ngIf="filterCurrSales.entities === null || filterCurrSales.entities.length === 0">
         <div class="body">
           <div class="form-group text-center">
             <h2 class="text-primary">هیچ PI فروخته شده ایی در سیستم وجود ندارد</h2>
@@ -368,7 +340,16 @@
 
   </section>
   
-
+  <swal #sweetAlert
+  title="خطا"
+  text=""
+  icon="error"
+  Height="20px"
+  Width="30px"
+  confirmButtonText = "قبول"
+  [showCancelButton]="false"
+  [focusCancel]="false">
+  </swal>
 
 
   

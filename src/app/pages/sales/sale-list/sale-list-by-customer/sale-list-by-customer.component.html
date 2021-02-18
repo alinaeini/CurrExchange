@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="card serch-card" *ngIf="filterCurrSales.currencySale !== null && filterCurrSales.currencySale.length > 0">
+      <div class="card serch-card" *ngIf="filterCurrSales.entities !== null && filterCurrSales.entities.length > 0">
         <div class="body">
           <div class="form-group row">
               <div class="col-2" >
@@ -215,7 +215,7 @@
           </div>
         </div>
       </div>
-      <div class="card serch-card" *ngIf="filterCurrSales.currencySale === null || filterCurrSales.currencySale.length === 0">
+      <div class="card serch-card" *ngIf="filterCurrSales.entities === null || filterCurrSales.entities.length === 0">
         <div class="body">
           <div class="form-group text-center">
             <h2 class="text-primary">هیچ PI فروخته شده ایی در سیستم وجود ندارد</h2>
