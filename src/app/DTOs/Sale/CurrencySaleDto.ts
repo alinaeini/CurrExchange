@@ -8,6 +8,14 @@ export class CurrencySaleDto {
         public brokerName: string,
         public customerName: string,
         public salePricePerUnit:number,
-        public transferPrice:number
+        public transferPrice:number,
+        public transferType:number
+         
     ) { }
+}
+
+
+export enum CurrencyTransferType{
+    Cash,
+    Accounting
 }

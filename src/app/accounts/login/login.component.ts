@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     });
     this.authService.checkUserAuth().subscribe((res) => {
       if (res.status === 'Success') {
-        this.router.navigate(['home']);
+        this.router.navigate(['/']);
       }
     });
 
@@ -65,11 +65,7 @@ export class LoginComponent implements OnInit {
   callEvent(loginUser: CurrentUserDto) {
     this.childData.emit(loginUser);
   }
-  redirectTo(uri: string) {
-    this.router
-      .navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate([uri]));
-  }
+
   submitloginForm() {
     var loginForm = new LoginUserDto(
       this.loginForm.controls.userName.value,
@@ -77,22 +73,22 @@ export class LoginComponent implements OnInit {
     );
     this.isLoading = true;
     this.authService.loginUserService(loginForm).subscribe((res) => {
-      const currentUser = new CurrentUserDto(
-        res.data.userId,
-        res.data.firstName,
-        res.data.lastName,
-        res.data.userRole,
-        res.data.userPermissions
-      );
-      // console.log(currentUser);
-
+      // console.log(res);
       if (res.status === 'Success') {
+        const currentUser = new CurrentUserDto(
+          res.data.userId,
+          res.data.firstName,
+          res.data.lastName,
+          res.data.userRole,
+          res.data.userPermissions
+        );
         this.cookieService.set(
           'exchange-curr-cookie',
           res.data.token,
-          res.data.expireTime * 60
+          res.data.expireTime *60
         );
         this.authService.setCurrentUser(currentUser);
+        // console.log(currentUser);
 
         // this.callEvent(currentUser);
         // console.log(res , currentUser);
@@ -104,7 +100,7 @@ export class LoginComponent implements OnInit {
         // this.sweetAlert.fire().then((result)=>{
         //   if(result.isConfirmed){
 
-        this.reloadCurrentPage();
+          this.router.navigate(['']);
         
         //   }
         // });
@@ -118,10 +114,5 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  reloadCurrentPage() {
-    let currentUrl = this.router.url;
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([currentUrl]);
-    });
-  }
+ 
 }

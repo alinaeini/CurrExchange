@@ -23,6 +23,8 @@ export class EShopInterceptor implements HttpInterceptor{
             url :DomainName + req.url,
             headers:req.headers.append('Authorization' ,'Bearer ' + token)
         })
+        // console.log(myrequest);
+        
         return next.handle(myrequest);
     }
 

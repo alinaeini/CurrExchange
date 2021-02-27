@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { userAuthGuard } from 'src/app/Utilities/userAuthGuard';
 import { HomeComponent } from './home.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 const routes: Routes = [

@@ -9,7 +9,7 @@
         </div>
     </li>
     
-<div *ngIf="currentUser!== null && currentUser.userPermissions.length > 0 ">
+<div *ngIf="currentUser!== null && currentUser!== undefined && currentUser.userPermissions !== undefined && currentUser.userPermissions.length > 0 ">
     <li *ngFor="let parent of currentUser?.userPermissions;index as i">
         <div [hidden]="parent.detaiList === null || parent.detaiList.length === 0">
                 <div [ngSwitch]="i+1" >

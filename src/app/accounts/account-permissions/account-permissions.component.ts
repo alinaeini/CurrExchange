@@ -83,7 +83,7 @@ export class AccountPermissionsComponent implements OnInit {
     (node) => !node.expandable
   );
 
-  expandedElement =  null;
+  expandedElement = null;
   checklistSelection = new SelectionModel<PermissionFlatNode>(
     true /* multiple */
   );
@@ -120,7 +120,6 @@ export class AccountPermissionsComponent implements OnInit {
       }
     });
 
-
     this.userService.getUserListNotRoles().subscribe((res) => {
       if (res.status === 'Success') {
         this.viewList = res.data;
@@ -137,57 +136,60 @@ export class AccountPermissionsComponent implements OnInit {
     });
   }
   expandTree(userId: number): void {
-    var rowInfo=this.rolePermissions.filter(x=>x.id == userId )[0]
-    this.expandedElement = this.expandedElement === rowInfo ? null : rowInfo   ;
-    var roleId = parseInt( this.viewList.filter((x) => x.id == userId)[0].roleName, 0);
-    if (roleId > 0) 
-    {
-        if (this.rolePermissionList.filter((x) => x.userId == userId).length > 0 ) 
-            {
-              let selectedItems = this.rolePermissionList.filter((x) => x.userId == userId)[0].permissionFlatNode;
-              // console.log(selectedItems);
-              
-              this.treeData.forEach((x) => {
-                if (selectedItems.filter((d) => d.id == x.id).length > 0) {
-                  x.selected = selectedItems.filter((d) => d.id == x.id)[0].selected;
-                }
-              });
-              
-            } 
-            else 
-            {
-              this.treeData.forEach((x) => (x.selected = false));
-            }
-    }
-    else
-    {
+    var rowInfo = this.rolePermissions.filter((x) => x.id == userId)[0];
+    this.expandedElement = this.expandedElement === rowInfo ? null : rowInfo;
+    var roleId = parseInt(
+      this.viewList.filter((x) => x.id == userId)[0].roleName,
+      0
+    );
+    if (roleId > 0) {
+      if (
+        this.rolePermissionList.filter((x) => x.userId == userId).length > 0
+      ) {
+        let selectedItems = this.rolePermissionList
+                          .filter( (x) => x.userId == userId )[0].permissionFlatNode;
+        // console.log(selectedItems);
+
+        this.treeData.forEach((x) => {
+          if (selectedItems.filter((d) => d.id == x.id).length > 0) {
+            x.selected = selectedItems.filter((d) => d.id == x.id)[0].selected;
+          }
+        });
+      } else {
+        this.treeData.forEach((x) => (x.selected = false));
+      }
+    } else {
       this.expandedElement = null;
-      this.sweetAlert.text =     ' هنوز نقشی برای کاربر مشخص نشده است ';
+      this.sweetAlert.text = ' هنوز نقشی برای کاربر مشخص نشده است ';
       this.sweetAlert.fire();
     }
   }
   addToRolePermissionList(userId: number, tree: PermissionFlatNode[]): void {
-    let mapToList: RolePermissionItem[] = [];
-    tree.forEach((x) => {
-      mapToList.push({
-        displayTitle: x.displayTitle,
-        id: x.id,
-        level: x.level,
-        selected: x.selected,
-        parentId: x.parentId,
+    var selectedItems = tree.filter((x) => x.selected);
+    // console.log(selectedItems);
+    if (selectedItems.length > 0) {
+      let mapToList: RolePermissionItem[] = [];
+      selectedItems.forEach((x) => {
+        mapToList.push({
+          displayTitle: x.displayTitle,
+          id: x.id,
+          level: x.level,
+          selected: x.selected,
+          parentId: x.parentId,
+        });
       });
-    });
-    if (this.treeData.length > 0) {
-      if (
-        this.rolePermissionList.filter((x) => x.userId == userId).length > 0
-      ) {
-        this.rolePermissionList.filter(
-          (x) => x.userId == userId
-        )[0].permissionFlatNode = mapToList;
-      } else {
-        this.rolePermissionList.push(
-          new RolePermissionListItems(userId, mapToList)
-        );
+      if (this.treeData.length > 0) {
+        if (
+          this.rolePermissionList.filter((x) => x.userId == userId).length > 0
+        ) {
+          this.rolePermissionList.filter(
+            (x) => x.userId == userId
+          )[0].permissionFlatNode = mapToList;
+        } else {
+          this.rolePermissionList.push(
+            new RolePermissionListItems(userId, mapToList)
+          );
+        }
       }
     }
     // console.log("addToRolePermissionList(save button) => ",this.rolePermissionList);
@@ -217,24 +219,30 @@ export class AccountPermissionsComponent implements OnInit {
   }
 
   submitRolesAndPermission() {
-    console.log(this.rolePermissionList);
+    // console.log(this.rolePermissionList);
     if (this.rolePermissionList.length === 0) {
+      this.sweetAlert.title = ' خطا';
+      this.sweetAlert.icon = 'error';
       this.sweetAlert.text =
         ' تعیین دسترسی به منوها برای هر کاربر را مشخص نمایید';
       this.sweetAlert.fire();
-    }
-    else
-    {
+    } else {
       this.isLoading = true;
       var output = new UserAccountPermissions(
         this.viewList,
         this.rolePermissionList
       );
-      this.userService.setAllUsersAccountPermissions(output).subscribe((res) => {
-        console.log(res);
-        this.isLoading = false;
-      });
-      
+      this.userService
+        .setAllUsersAccountPermissions(output)
+        .subscribe((res) => {
+          // console.log(res);
+          this.sweetAlert.text = ' تغییرات با موفقیت انجام شد';
+          this.sweetAlert.title = ' توجه';
+          this.sweetAlert.icon = 'success';
+          this.sweetAlert.fire();
+          this.rolePermissionList =[];
+          this.isLoading = false;
+        });
     }
   }
 }

@@ -1,5 +1,4 @@
-<!-- <app-sidebar [ngStyle]="{'display':this.user === null ? 'none' : 'block' }" ></app-sidebar> -->
-<div  [hidden] = "currentUser === null" >
+<div  [hidden] = "currentUser === null || currentUser === undefined" >
 
     <div class="navbar-right" >
         <ul class="navbar-nav">
@@ -85,7 +84,7 @@
                 </ul>
             </li>
             <li><a  (click)="logOutUser()" class="mega-menu" title="خروج از سیستم "><i class="zmdi zmdi-power"></i></a></li>
-
+  
         </ul>
     </div>
     <!-- Left Sidebar -->
@@ -100,11 +99,14 @@
             <app-menu-items [currentUser]="currentUser" ></app-menu-items>
         </div>
     </aside>
+  
+  
+  
 </div>
 
+<router-outlet (activate)='onActivate($event)'></router-outlet> 
 
 
-<router-outlet></router-outlet>
 
 
 

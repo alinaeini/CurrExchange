@@ -20,6 +20,7 @@ import { JalalipipeModule } from './shared/modules/jalalipipe.module';
 @NgModule({
   declarations: [
     AppComponent,
+    // SidebarComponent,
     MenuItemsComponent,
   ],
   imports: [

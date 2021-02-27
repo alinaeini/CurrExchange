@@ -234,23 +234,25 @@ this.getCustomers()
       var salePrice = this.ex_normalNum(this.salesForm.controls.salePrice.value);
       var brokerSelected = this.brokers.filter((x) => x.id == parseInt(this.brokerId))[0];
       
-      
-      if(this.TransferType )
-      {
-          switch (this.TransferType) 
-          {
-            case '1':
-              this.transferPrice =
-                parseInt(salePrice) * brokerSelected.serviceChargeAccount;
-              break;
-            case '2':
-              this.transferPrice =
-                parseInt(salePrice) * brokerSelected.serviceChargeCash;
-              break;
-          }
+      if(this.transferPrice === 0)
+        if(this.TransferType )
+        {
+            switch (this.TransferType) 
+            {
+              case '1':
+                this.transferPrice =
+                  parseInt(salePrice) * brokerSelected.serviceChargeCash;
+                break;
+                
+              case '2':
+                this.transferPrice =
+                  parseInt(salePrice) * brokerSelected.serviceChargeAccount;
+                break;
+
+            }
+        }
+        // console.log(this.transferPrice);
       }
-      // console.log(this.transferPrice);
-    }
   }
   submitSaleForm() {
     var validation =true ;
@@ -329,6 +331,7 @@ this.getCustomers()
             this.exDecControl.reset();
             this.exDecForm.reset();
             this.salesForm.reset();
+            this.transferPrice =0;
           if (res.status === "Error") {
             this.sweetAlert.text= res.data.info;
             this.sweetAlert.fire();

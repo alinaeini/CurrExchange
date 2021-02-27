@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Component, OnInit,  Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { CurrentUserDto } from './DTOs/Account/CurrentUserDto';
 import { AuthorizationService } from './Services/authorization.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   @Output() public childData = new EventEmitter();
   currentUser: CurrentUserDto = null;
   title = 'سیستم مدیریت فروش ارز';
-  IsOpenLi=false;
   userPermissions:UserRolePermissionDto[]=[]
   constructor(
     private authService: AuthorizationService,
@@ -31,7 +30,7 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
           this.authService.checkUserAuth().subscribe((res): void => {
-            //console.log(res );
+            // console.log(res );
             
           if (res.status === "Error") 
               this.router.navigate(['/login']);
@@ -45,10 +44,10 @@ export class AppComponent implements OnInit {
               res.data.userPermissions
             );
             this.authService.setCurrentUser(user);
-            this.authService.getCurrentUser().subscribe((res) => {
-              this.currentUser = res;
+            // this.authService.getCurrentUser().subscribe((res) => {
+            //   this.currentUser = res;
 
-            });
+            // });
             this.router.navigate([""]);
           }
         });
@@ -58,7 +57,10 @@ export class AppComponent implements OnInit {
     this.authService.setCurrentUser(null);
     this.router.navigate(['login']);
   }
-  
+  onActivate(event){
+    
+    this.authService.getCurrentUser().subscribe((res) => {
+      this.currentUser = res;
+    });
+  }
 }
-
-

@@ -8,8 +8,9 @@ import { BrokerService } from 'src/app/Services/broker.service';
 import { BrokerDto } from '../../../DTOs/Broker/BrokerDto';
 import { CustomerDto } from 'src/app/DTOs/Customer/customerDto';
 import { CurrencySaleFilter } from 'src/app/DTOs/Sale/CurrencySaleFilter';
-import moment from 'moment';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import moment from 'jalali-moment';
+import { TableExporter } from '../../../shared/Export/TableExporter';
 
 @Component({
   selector: 'app-sale-list',
@@ -28,6 +29,7 @@ export class SaleListComponent implements OnInit {
     'customerName',
     'profitLossAmount',
     'salePricePerUnit',
+    'transferType',
     'transferPrice',
     'operation'
   ];
@@ -100,28 +102,27 @@ clearFilters(){
 
 
 filterGenerate(){
-  var from =moment(this.dateFrom, 'jYYYY/jMM/jDD') ;
-  // console.log(from);
-  console.log(from.locale('fa').format('YYYY-MM-DD'));
   
+  var from =moment(this.dateFrom, 'jYYYY/jMM/jDD') ;
   var to =moment(this.dateTo, 'jYYYY/jMM/jDD') ;
   if (new Date(from.locale('en').format('YYYY-MM-DD')).toString() === 'Invalid Date' || 
       new Date(to.locale('en').format('YYYY-MM-DD')).toString() === 'Invalid Date' ) {
         this.filterCurrSales.fromDateSale = "" ;
         this.filterCurrSales.toDateSale = "" ;
   }else{
-    this.filterCurrSales.fromDateSale = from.locale('en').format('YYYY-MM-DD') ;
-    this.filterCurrSales.toDateSale = to.locale('en').format('YYYY-MM-DD');
+    this.filterCurrSales.fromDateSale = moment(from.clone(), 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD') ;
+    this.filterCurrSales.toDateSale = moment(to.clone(), 'YYYY/MM/DD').locale('en').format('YYYY/MM/DD');
   }
+  // console.log(this.filterCurrSales.toDateSale  < this.filterCurrSales.fromDateSale);
   if(this.filterCurrSales.toDateSale  < this.filterCurrSales.fromDateSale)
   {
     this.sweetAlert.text= "لطفا تاریخ فروش را به درستی وارد کنید";
     this.sweetAlert.fire();
   }
   else{
-    // console.log(this.filterCurrSales);
-   // this.getCurrSaleList();
-   // this.setNavigate('pageId', this.filterCurrSales.pageId);
+    console.log(this.filterCurrSales);
+   this.getCurrSaleList();
+   this.setNavigate('pageId', this.filterCurrSales.pageId);
   }
 //  console.log(this.filterCurrSales);
 
@@ -156,7 +157,9 @@ filterGenerate(){
     });
   }
  
-
+  exportNormalTable() {
+    TableExporter.exportToExcel("ExampleMaterialTable");
+  }
   checkFilterToggle(){
     // console.log(this.checkToggle );
     this.checkToggle = !this.checkToggle;
@@ -267,6 +270,7 @@ piDetailByCurrId(id:string){
     // });
   }
   setNavigate(filterParam: string = null, value: any = null) {
+    value = (value ===undefined) || (value ===null)  ? '' : value ;  
     let pageid: number = this.filterCurrSales.pageId;
     let searchText: string = '';
     let idStr: string = this.Id;
