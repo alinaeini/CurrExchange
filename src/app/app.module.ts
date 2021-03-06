@@ -15,13 +15,14 @@ import { MaterialModule } from './shared/modules/material.module';
 import { PersianModule } from 'src/app/shared/modules/persian.module';
 import { MenuItemsComponent } from './shared/menu-items/menu-items.component';
 import { JalalipipeModule } from './shared/modules/jalalipipe.module';
-
+import { PrintPageComponent } from './pages/print-page/print-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     // SidebarComponent,
     MenuItemsComponent,
+    // StimulsoftViewerModule
   ],
   imports: [
     BrowserModule,

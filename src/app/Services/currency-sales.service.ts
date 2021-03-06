@@ -21,6 +21,13 @@ export class CurrencySalesService {
      return this.http.post<any>("/currency/create", currSales);
    } 
 
+   public createReport(): Observable<any> {
+    // console.log(JSON.stringify(currSales) );
+     return this.http.post<any>("/Viewer/InitViewer",null);
+   } 
+
+
+
    public getFilteredCurrExdecByExdecId(filter: FilterCurrSaleExDecDto): Observable<IResponseResult<FilterCurrSaleExDecDto>> {
     let requestParams;
     if (filter !== null) {

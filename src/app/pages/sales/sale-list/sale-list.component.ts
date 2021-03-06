@@ -11,6 +11,7 @@ import { CurrencySaleFilter } from 'src/app/DTOs/Sale/CurrencySaleFilter';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import moment from 'jalali-moment';
 import { TableExporter } from '../../../shared/Export/TableExporter';
+import { DomainName } from 'src/app/Utilities/pathTools';
 
 @Component({
   selector: 'app-sale-list',
@@ -99,10 +100,11 @@ clearFilters(){
   this.setNavigate('pageId', this.filterCurrSales.pageId);
 }
 
-
+print(){
+this.entitiessService.createReport().subscribe(x=>{});
+}
 
 filterGenerate(){
-  
   var from =moment(this.dateFrom, 'jYYYY/jMM/jDD') ;
   var to =moment(this.dateTo, 'jYYYY/jMM/jDD') ;
   if (new Date(from.locale('en').format('YYYY-MM-DD')).toString() === 'Invalid Date' || 
@@ -120,7 +122,7 @@ filterGenerate(){
     this.sweetAlert.fire();
   }
   else{
-    console.log(this.filterCurrSales);
+    //console.log(this.filterCurrSales);
    this.getCurrSaleList();
    this.setNavigate('pageId', this.filterCurrSales.pageId);
   }

@@ -59,6 +59,8 @@ export class ExDeclarationsComponent implements OnInit {
     else
     var price ="0";
 
+
+
     var m =moment(this.exprireDate, 'jYYYY/jMM/jDD') ;
     var gregorianDate = m.locale('en').format('YYYY-MM-DD');
     var exDeclaration = new CreateExDeclarationsDto(

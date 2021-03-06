@@ -19,6 +19,7 @@ import { CreateSaleDto } from '../../DTOs/Sale/CreateSaleDto';
 import * as moment from 'jalali-moment';
 import { CurrencySalesService } from '../../Services/currency-sales.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { DomainName } from 'src/app/Utilities/pathTools';
 
 @Component({
   selector: 'app-sales',
@@ -64,6 +65,7 @@ export class SalesComponent implements OnInit {
 
   public exDecForm: FormGroup;
   public salesForm: FormGroup;
+
   transferPrice: number = 0;
   constructor(
     private customerService: CustomerService,

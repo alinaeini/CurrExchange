@@ -21,7 +21,8 @@ export class EShopInterceptor implements HttpInterceptor{
         // let myrequest : HttpRequest<any>= req;
         const myrequest = req.clone({
             url :DomainName + req.url,
-            headers:req.headers.append('Authorization' ,'Bearer ' + token)
+            headers:req.headers.append('Authorization' ,'Bearer ' + token),
+            //withCredentials: true,
         })
         // console.log(myrequest);
         

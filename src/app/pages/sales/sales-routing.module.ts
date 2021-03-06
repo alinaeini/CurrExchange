@@ -9,6 +9,7 @@ import { SaleExdecListByCurrencysaleIdComponent } from './sale-exdec-list-by-cur
 import { SalePiListByCurrencysaleIdComponent } from './sale-pi-list-by-currencysale-id/sale-pi-list-by-currencysale-id.component';
 import { SaleCustomerTotalComponent } from './sale-customer-total/sale-customer-total.component';
 import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/sale-list-by-customer.component';
+import { PrintPageComponent } from '../print-page/print-page.component';
 
 const routes: Routes = [
   { path: '', component: SalesComponent, canActivate: [userAuthGuard]},
@@ -23,6 +24,8 @@ const routes: Routes = [
   { path: 'sale-list-by-customer', component: SaleListByCustomerComponent, canActivate: [userAuthGuard]},
 
   { path: 'sale-customer-total', component: SaleCustomerTotalComponent, canActivate: [userAuthGuard]},
+
+  {path : 'print',component:PrintPageComponent}
 ]
 
 @NgModule({

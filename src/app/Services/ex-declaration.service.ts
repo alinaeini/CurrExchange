@@ -26,7 +26,7 @@ export class ExDeclarationService {
   } 
 
   createExDecService(exDec: CreateExDeclarationsDto): Observable<any> {
-    console.log(JSON.stringify(exDec) );
+    // console.log(JSON.stringify(exDec) );
     return this.http.post<any>("/exdeclaration/create", exDec);
   }
 

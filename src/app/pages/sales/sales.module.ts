@@ -1,4 +1,4 @@
-import {  NgModule } from '@angular/core';
+import {  NgModule,CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesComponent } from './sales.component';
 import { SaleListComponent } from './sale-list/sale-list.component';
@@ -15,7 +15,8 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { JalalipipeModule } from 'src/app/shared/modules/jalalipipe.module';
 import { SaleCustomerTotalComponent } from './sale-customer-total/sale-customer-total.component';
 import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/sale-list-by-customer.component';
-
+import { PrintPageComponent } from '../print-page/print-page.component';
+import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/s
     SalePiListByCurrencysaleIdComponent,
     SaleCustomerTotalComponent,
     SaleListByCustomerComponent,
+    PrintPageComponent,
     // JalaliPipe
   ],
   imports: [
@@ -39,8 +41,12 @@ import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/s
     PersianModule,
     SweetAlert2Module,
     NgxLoadingModule,
-    JalalipipeModule
+    JalalipipeModule,
+    StimulsoftViewerModule,
   ],
-  exports : []
+  exports : [],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
 })
 export class SalesModule { }

@@ -23,3 +23,22 @@
 .margin-top{
     margin-top: 20px;
 }
+
+
+app-print-page {
+    /* hide the printing component from @media screen */
+    display: none;
+  }
+  
+  @media print {
+    /* invert the display (show/hide) properties of the main */
+    /* aplication component and the printing component       */
+  
+    app-print-page {
+      display: block;
+    }
+  
+    app-sales {
+      display: none;
+    }
+  }

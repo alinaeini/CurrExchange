@@ -13,6 +13,8 @@ import { LoginUserDto } from 'src/app/DTOs/Account/LoginUserDto';
 import { CookieService } from 'ngx-cookie-service';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { CurrentUserDto } from 'src/app/DTOs/Account/CurrentUserDto';
+import { CompanyInfoService } from '../../Services/company-info.service';
+import { DomainName } from 'src/app/Utilities/pathTools';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +27,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   public loginForm: FormGroup;
   user: CurrentUserDto = null;
+  public domain: string = DomainName;
   ErrorCaractersisMoreThanMax: string =
     ' تعداد کاراکترها نمیتواند بیشتر از حد مجاز باشد';
   @ViewChild('sweetAlert')

@@ -4,6 +4,9 @@ import { CurrentUserDto } from './DTOs/Account/CurrentUserDto';
 import { AuthorizationService } from './Services/authorization.service';
 import { CookieService } from 'ngx-cookie-service';
 import { UserRolePermissionDto } from './DTOs/Account/Permissions/UserRolePermissionDto';
+import { DomainName } from './Utilities/pathTools';
+import { CompanyInfoService } from './Services/company-info.service';
+import { CompanyDto } from './DTOs/Company/CompanyDto';
 
 @Component({
   selector: 'app-root',
@@ -15,12 +18,15 @@ import { UserRolePermissionDto } from './DTOs/Account/Permissions/UserRolePermis
 export class AppComponent implements OnInit {
   @Output() public childData = new EventEmitter();
   currentUser: CurrentUserDto = null;
+  currentCompany: CompanyDto = null;
   title = 'سیستم مدیریت فروش ارز';
-  userPermissions:UserRolePermissionDto[]=[]
+  userPermissions:UserRolePermissionDto[]=[];
+  public domain: string = DomainName;
   constructor(
     private authService: AuthorizationService,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private company : CompanyInfoService
   ) {}
 
 
@@ -29,6 +35,8 @@ export class AppComponent implements OnInit {
     this.childData.emit(currentUser);
   }
   ngOnInit(): void {
+          this.getCompany();
+
           this.authService.checkUserAuth().subscribe((res): void => {
             // console.log(res );
             
@@ -57,8 +65,23 @@ export class AppComponent implements OnInit {
     this.authService.setCurrentUser(null);
     this.router.navigate(['login']);
   }
+
+  getCompany(){
+    this.company.getCompany().subscribe((res): void => {
+      // console.log(res);
+    if (res.status === "Error") 
+        console.log(res);
+        
+    if (res.status === 'Success') 
+    {
+      this.currentCompany = res.data ; 
+    }
+  });
+}
   onActivate(event){
-    
+    // this.company.getCompanyObs().subscribe(res =>{
+    //   this.currentCompany = res ;
+    // });
     this.authService.getCurrentUser().subscribe((res) => {
       this.currentUser = res;
     });
