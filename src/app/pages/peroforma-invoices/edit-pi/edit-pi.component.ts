@@ -77,11 +77,15 @@ export class EditPiComponent implements OnInit {
       var pi = new PiDto(
         this.piId,
         this.piForm.controls.piCode.value,
-        new Date(this.piDate),
+        new Date(this.piForm.controls.piDate.value),
         parseInt( basePrice),
         parseInt(totalPrice),
         
       );
+      // this.piForm.controls.piDate.value
+      // console.log(new Date().toISOString());
+      // console.log(JSON.stringify(pi));
+      
       this.piService.editPi(pi).subscribe((res) => {
         this.isLoading=false ;
         if (res.status === "Success")

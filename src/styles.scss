@@ -29,7 +29,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .top-margin {
   margin-top: 7px !important;
 }
- th,td{
+ th,td,tr{
   font-family: 'IRANSansDN';
   font-weight: initial;
  }
@@ -39,13 +39,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 //   font-size: medium;
 // }
 
-th,
-td {
-  padding-left: 10px !important ;
-  padding-right: 10px !important;
-  padding-top: 10px !important;
-
-}
 .card .body {
   font-family: 'IRANSansDN';
 }
@@ -107,13 +100,7 @@ tr.cdk-header-row .ng-star-inserted{
 //   font-size: medium;
 // }
 
-th,
-td {
-  padding-left: 10px !important ;
-  padding-right: 10px !important;
-  padding-top: 10px !important;
 
-}
 .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: transparent !important ;
   }

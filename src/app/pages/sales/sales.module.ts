@@ -17,7 +17,9 @@ import { SaleCustomerTotalComponent } from './sale-customer-total/sale-customer-
 import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/sale-list-by-customer.component';
 import { PrintPageComponent } from '../print-page/print-page.component';
 import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
-
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
   ],
   imports: [
     CommonModule,
+    StimulsoftViewerModule,
+    HttpClientModule,
     SalesRoutingModule,
     ReactiveFormsModule,
     FormsModule,
@@ -41,9 +45,8 @@ import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
     PersianModule,
     SweetAlert2Module,
     NgxLoadingModule,
-    JalalipipeModule,
-    StimulsoftViewerModule,
-  ],
+    JalalipipeModule
+    ],
   exports : [],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

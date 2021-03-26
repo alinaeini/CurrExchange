@@ -63,7 +63,7 @@
                           *ngIf=" piForm.controls.piCode.errors?.required && piForm.controls.piCode.touched ">
                           لطفا شماره PI را وارد کنید
                         </p>
-                        <div class="form-group form-float">
+                        <!-- <div class="form-group form-float">
                           <input class="form-control ng-pristine" [(ngModel)]="piDate" type="text"
                             placeholder="تاریخ PI" formControlName="piDate"  #datepickerInput />
                           <p class="text-danger"
@@ -80,8 +80,19 @@
                             [dateOnSelect]="selectedValuesFromPickupDate"
                             [dateInitValue]="false">
                           </ng-persian-datepicker>
+                        </div> -->
+                        <div class="form-group ">
+                          <mat-form-field appearance="fill" class="form-control" >
+                            <mat-label>تاریخ ایجاد PI</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="piDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                          <p class="text-danger"
+                          *ngIf="piForm.controls.piDate.errors?.required &&  piForm.controls.piDate.touched ">
+                            لطفا تاریخ PI را وارد کنید
+                        </p>
                         </div>
-        
                         <div class="form-group form-float input-group">
                              <input type="text" class="form-control"  onkeyup="separateNum(this.value,this);"
                                 placeholder="مبلغ درهم پایه " formControlName="basePrice" />

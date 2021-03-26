@@ -11,10 +11,7 @@ import { CurrentUserDto } from 'src/app/DTOs/Account/CurrentUserDto';
 })
 export class MenuItemsComponent implements OnInit {
   @Input('currentUser') public currentUser: CurrentUserDto = null;
-  constructor(
-    private authService: AuthorizationService,
-    private router: Router
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {  
     // alert('menu');

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Pipe } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { CurrencySalesService } from 'src/app/Services/currency-sales.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,11 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import moment from 'jalali-moment';
 import { TableExporter } from '../../../shared/Export/TableExporter';
 import { DomainName } from 'src/app/Utilities/pathTools';
+import { PrintPageComponent } from '../../print-page/print-page.component';
+import { ReportService } from '../../../Services/report.service';
+import { CurrencySaleDto, CurrencySaleToReportDto } from 'src/app/DTOs/Sale/CurrencySaleDto';
+import { map } from 'rxjs/operators';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-sale-list',
@@ -62,6 +67,7 @@ export class SaleListComponent implements OnInit {
     private entitiessService:CurrencySalesService,
     private customerService: CustomerService,
     private brokerService: BrokerService,
+    private reportService: ReportService,
   ) {}
 
   ngOnInit(): void {
@@ -101,7 +107,37 @@ clearFilters(){
 }
 
 print(){
-this.entitiessService.createReport().subscribe(x=>{});
+
+  // set printPage(v: printPage) {
+
+  // }
+  var dataInfo :CurrencySaleToReportDto[]=[]
+   this.filterCurrSales.entities.forEach( x=>
+  {
+      var shamsiDate =moment(x.currSaleDate, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD').toString();
+    
+       dataInfo.push(({
+        brokerName: x.brokerName,
+        customerName: x.customerName,
+        currSaleDate: shamsiDate,
+        id: x.id,
+        piCode: x.piCode,
+        price: x.price,
+        profitLossAmount: x.profitLossAmount,
+        salePricePerUnit: x.salePricePerUnit,
+        transferPrice: x.transferPrice,
+        transferType: x.transferType,
+       }))
+
+});
+  // dataInfo = dataInfo.forEach( x=> {x.currSaleDate = moment(x.currSaleDate, 'jYYYY/jMM/jDD').toString()} )  ;
+  console.log(dataInfo);
+  this.reportService.addDataAndReportName(dataInfo,'ReportFilterCurrencySale.mrt');
+  this.router.navigate(['sales/print']);
+// this.entitiessService.createReport().subscribe(x=>{
+//   console.log(x);
+  
+// });
 }
 
 filterGenerate(){

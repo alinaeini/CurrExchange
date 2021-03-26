@@ -15,6 +15,23 @@ export class CurrencySaleDto {
 }
 
 
+export class CurrencySaleToReportDto {
+    constructor(
+        public id: number,
+        public price: number,
+        public profitLossAmount: number,
+        public currSaleDate: string,
+        public piCode: string,
+        public brokerName: string,
+        public customerName: string,
+        public salePricePerUnit:number,
+        public transferPrice:number,
+        public transferType:number
+         
+    ) { }
+}
+
+
 export enum CurrencyTransferType{
     Cash,
     Accounting

@@ -75,6 +75,7 @@ export class PiService {
   }
 
   editPi(Pi: PiDto): Observable<IResponseResult<any>> {
+    // console.log(JSON.stringify(Pi))
     return this.http.post<IResponseResult<any>>('/pi/edit-pi', Pi);
   }
 

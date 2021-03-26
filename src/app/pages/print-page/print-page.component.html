@@ -1,124 +1,30 @@
-<div class="p-grid p-nogutter">
-  <div class="p-col">
-    <h1> Assistência Nº 1 </h1>
-  </div>
-</div>
 
-<div class="p-grid p-nogutter">
-  <div class="p-col">
-    <img
-    src="../../assets/logotipo.svg"
-    alt="logotipo"
-    class="logotipo">
-  </div>
+            <stimulsoft-viewer-angular
 
-  <div class="p-col">
-    <h2>N Reparações</h2>
-    <p>91 886 73 76</p>    
-    <div class="address">
-      <p>geral@nreparacoes.com</p>
-      <p>Av. Dr. Ribeiro de Magalhães, 1391</p>
-      <p>Centro Comercial 123, Loja BD</p>
-      <p>4610-108 Felgueiras</p>
-    </div>
-  </div>
-</div>
+            [requestUrl]="domain +'/Viewer/{action}'"
 
-<div class="p-grid p-nogutter items-group">
-  <div class="p-col-8">
-    <div class="p-grid p-nogutter">
-      <p class="p-col-12 label">Cliente</p>
-      <p class="p-col-12">Manuel Alberto Magalhães Carvalho</p>
-    </div>
-  </div>
-  <div class="p-col-4">
-    <div class="p-grid p-nogutter">             
-      <p class="p-col-12 label">Contacto</p>  
-      <p class="p-col-12">91 000 00 00</p>    
-    </div>
-  </div>
-</div>
+            [action]="'InitViewer'"
+            [properties]="properties"
+            ></stimulsoft-viewer-angular>
 
-<div class="p-grid p-nogutter">
-  <div class="p-col-12">
-    <div class="p-grid p-nogutter items-group">
-      <div class="p-col">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Categoria</p>
-          <p class="p-col-12">Telemóvel</p>
+            <!-- <stimulsoft-viewer-angular
+
+            [requestUrl]="domain +'/CurrencyReport/{action}'"
+
+            [action]="'GetReportdCurrSales/filterCurrSales'"
+
+
+            ></stimulsoft-viewer-angular> -->
+
+<!-- <section class="content">
+  <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+
+          </div>
         </div>
       </div>
-      <div class="p-col">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Marca</p>
-          <p class="p-col-12">Apple</p>
-        </div>
-      </div>
-      <div class="p-col">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Modelo</p>
-          <p class="p-col-12">Iphone 6</p>
-        </div>
-      </div>
-      <div class="p-col">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Cor</p>
-          <p class="p-col-12">Cinza</p>
-        </div>
-      </div>
-      <div class="p-col">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Serial</p>
-          <p class="p-col-12">appl2015ewfwejuk23423</p>
-        </div>
-      </div>
-    </div>
   </div>
-  <div class="p-col-12">
-    <div class="p-grid p-nogutter items-group-sub">
-      <div class="p-col-6">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Problema</p>
-          <p class="p-col-12">Não arranca</p>
-        </div>
-      </div>
-      <div class="p-col-6">
-        <div class="p-grid p-nogutter">
-          <p class="p-col-12 label">Observações</p>
-          <p class="p-col-12">codigo: 1798 - tem de ficar pronto até dia 12/02/2019</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="p-grid p-nogutter items-group">
-  <div class="p-col">
-    <p class="label">Condições Gerais:</p>
-    <ul class="disclaimer">
-      <li>Prazo para levantar 90 dias</li>
-      <li>Garantia 90 dias</li>
-      <li>Esta assistência só é entregue a quem apresentar este documento</li>
-      <li>O preço acresce 10% a cada 30 dias após fim do prazo de levantamento (taxa de conservação)</li>
-      <li>Os dados do cliente, acima mencionados, ficam registados na N Reparações apenas para efeitos de comunicação
-        em relação às suas assistências e facturação
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="p-grid p-nogutter">
-  <div class="p-col">
-    <p class="disclaimer signature-field">Declaro que li e concordo com o disposto neste documento em 03/02/2019</p>
-  </div>
-</div>
-
-
-<stimulsoft-viewer-angular
-
-[requestUrl]="domain +'/Viewer/{action}'"
-
-[action]="'InitViewer'"
-
-[height]="'600px'"
-></stimulsoft-viewer-angular>
+</section> -->
+<!-- <stimulsoft-viewer-angular [requestUrl]="'domain +/Viewer/{action}'" [action]="'Post'" ></stimulsoft-viewer-angular> -->
