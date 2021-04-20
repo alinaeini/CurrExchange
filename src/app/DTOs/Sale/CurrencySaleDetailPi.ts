@@ -9,7 +9,9 @@ export class CurrencySaleDetailPi {
         public piCode: string,
         public brokerName: string,
         public customerName: string,
-        public piDetailPrice:number
+        public piDetailPrice:number,
+        public sellPriceCurrency:number,
+        public sellPriceCommodity:number,
     ) { }
 }
 

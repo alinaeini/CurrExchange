@@ -87,6 +87,7 @@ export class CurrencySalesService {
 
   public getFilteredCurrSales(filter: CurrencySaleFilter): Observable<IResponseResult<CurrencySaleFilter>> {
     let requestParams;
+    //  console.log(JSON.stringify(filter) );
     if (filter !== null) {
       requestParams = new HttpParams()
         .set("pageId", filter.pageId.toString())
@@ -94,14 +95,22 @@ export class CurrencySalesService {
         .set("takeEntity", filter.takeEntity.toString())
         .set("brokerId", filter.brokerId.toString())
         .set("customerId", filter.customerId.toString())
+
         .set("isCashed", filter.isCashed.toString())
         .set("isAccount", filter.isAccount.toString())
+
         .set("fromDateSale", filter.fromDateSale.toString())
         .set("toDateSale", filter.toDateSale.toString())
+
         .set("fromSaleBasePrice", filter.fromSaleBasePrice.toString())
         .set("toSaleBasePrice", filter.toSaleBasePrice.toString())
+
+        .set("isCurrencyTypeCurrency", filter.isCurrencyTypeCurrency.toString())
+        .set("isCurrencyTypeBroker", filter.isCurrencyTypeBroker.toString())
+        .set("isCurrencyTypeMissCustomer", filter.isCurrencyTypeMissCustomer.toString())
+        .set("isCurrencyTypeCommCustomer", filter.isCurrencyTypeCommCustomer.toString())
       }
-      // console.log(JSON.stringify(filter) );
+      // console.log(JSON.stringify(filter.fromDateSale) );
     return this.http.get<IResponseResult<CurrencySaleFilter>>("/currency/sale-filter-currSale",{ params: requestParams }
     );
   }

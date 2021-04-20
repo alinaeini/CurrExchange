@@ -7,6 +7,8 @@ import { UserRolePermissionDto } from './DTOs/Account/Permissions/UserRolePermis
 import { DomainName } from './Utilities/pathTools';
 import { CompanyInfoService } from './Services/company-info.service';
 import { CompanyDto } from './DTOs/Company/CompanyDto';
+import { FinancialPeriodService } from './Services/financial-period.service';
+import { FinancialPeriodDto } from './DTOs/Account/FinancialPeriodDto';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,7 @@ import { CompanyDto } from './DTOs/Company/CompanyDto';
 export class AppComponent implements OnInit {
   @Output() public childData = new EventEmitter();
   currentUser: CurrentUserDto = null;
+  currentFinancial: FinancialPeriodDto = null;
   currentCompany: CompanyDto = null;
   title = 'سیستم مدیریت فروش ارز';
   userPermissions:UserRolePermissionDto[]=[];
@@ -26,7 +29,8 @@ export class AppComponent implements OnInit {
     private authService: AuthorizationService,
     private cookieService: CookieService,
     private router: Router,
-    private company : CompanyInfoService
+    private company : CompanyInfoService,
+    private financialService : FinancialPeriodService
   ) {}
 
 
@@ -42,22 +46,27 @@ export class AppComponent implements OnInit {
             
           if (res.status === "Error") 
               this.router.navigate(['/login']);
-          if (res.status === 'Success') 
-          {
-            const user = new CurrentUserDto(
-              res.data.userId,
-              res.data.firstName,
-              res.data.lastName,
-              res.data.userRole,
-              res.data.userPermissions
-            );
-            this.authService.setCurrentUser(user);
-            // this.authService.getCurrentUser().subscribe((res) => {
-            //   this.currentUser = res;
-
-            // });
-            this.router.navigate([""]);
-          }
+          // if (res.status === 'Success') 
+          // {
+          //   const user = new CurrentUserDto(
+          //     res.data.userId,
+          //     res.data.firstName,
+          //     res.data.lastName,
+          //     res.data.userRole,
+          //     res.data.userPermissions,
+          //     res.data.financialPeriodId
+          //   );
+          //   this.authService.setCurrentUser(user);
+          //   this.financialService.getFinancialById(this.currentUser.financialPeriodId.toString()).subscribe( res =>{
+          //     if (res.status === 'Success') {
+          //       this.currentFinancial = res.data;
+          //       this.financialService.setFinancialByIdBehaviorSubject(this.currentFinancial);
+          //       //console.log(res.status );
+                
+          //     }    
+          //   }); 
+          //   this.router.navigate([""]);
+          // }
         });
       }
   logOutUser() {
@@ -69,8 +78,8 @@ export class AppComponent implements OnInit {
   getCompany(){
     this.company.getCompany().subscribe((res): void => {
       // console.log(res);
-    if (res.status === "Error") 
-        console.log(res);
+    // if (res.status === "Error") 
+    //     console.log(res);
         
     if (res.status === 'Success') 
     {
@@ -79,11 +88,14 @@ export class AppComponent implements OnInit {
   });
 }
   onActivate(event){
-    // this.company.getCompanyObs().subscribe(res =>{
-    //   this.currentCompany = res ;
-    // });
     this.authService.getCurrentUser().subscribe((res) => {
       this.currentUser = res;
+    });
+
+    this.financialService.getFinancialByIdBehaviorSubject().subscribe(res => {
+      this.currentFinancial = res ;
+      //console.log(this.currentFinancial);
+      
     });
   }
 }

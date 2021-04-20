@@ -116,14 +116,14 @@ export class AccountPermissionsComponent implements OnInit {
           }
         }
         this.permissionData = new ArrayDataSource(this.treeData);
-        // console.log(this.treeData);
+        // console.log(this.permissionData);
       }
     });
 
     this.userService.getUserListNotRoles().subscribe((res) => {
       if (res.status === 'Success') {
         this.viewList = res.data;
-        //console.log(this.viewList);
+        console.log(this.viewList);
         for (const obj of this.viewList) {
           if (obj.roleName === undefined || obj.roleName === null) {
             obj.roleName = '0';

@@ -9,8 +9,14 @@ export class CreateSaleDto{
         public description: string,
         public brokerId: number,
         public customerId: number,
+        public currencyType :number,
         public exDecExport:ExDecExport[]
     ){
 
+
     }
+
+
 }
+
+

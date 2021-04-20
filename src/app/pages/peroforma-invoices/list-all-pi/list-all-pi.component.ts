@@ -32,6 +32,7 @@ export class ListAllPiComponent implements OnInit {
     0,
     1,
     '',
+    '1',
     []
   );
   pages: number[] = [];
@@ -90,11 +91,21 @@ clickOption(event){
   getTotalSoldPrice() {
     return this.filterPi.piRemaind.map(t => t.soldPrice).reduce((acc, value) => acc + value, 0);
   }
+
+  getAvrageOfBasePrice() {
+    return this.filterPi.piRemaind.filter(x=>x.basePrice > 0).map(t => t.basePrice).reduce((acc, value)=>
+       acc + value, 0 ) / this.filterPi.piRemaind.length ;
+  }
+
+
+
   getPiList() {
     this.isLoadingData = true;
     this.piService.getAllPi(this.filterPi).subscribe((result) => {
       if (result.status == 'Success') {
         this.filterPi = result.data;
+        // console.log(this.filterPi);
+        
         //data
         this.dataSource = new MatTableDataSource(this.filterPi.piRemaind);
         this.dataSource.sort = this.sort;

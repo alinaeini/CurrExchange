@@ -30,9 +30,10 @@ export class SaleListComponent implements OnInit {
   displayedColumns: string[] = [
     'row',
     'currSaleDate',
+    'currencyType',
     'brokerName',
-    'price',
     'customerName',
+    'price',
     'profitLossAmount',
     'salePricePerUnit',
     'transferType',
@@ -45,7 +46,7 @@ export class SaleListComponent implements OnInit {
     0,
     0,
     0,
-    10,
+    25,
     0,
     1,
     '',
@@ -81,9 +82,12 @@ export class SaleListComponent implements OnInit {
         else this.filterCurrSales.pageId = 1;
         //console.log(this.filterExDec.pageId ,this.filterExDec.pageCount);
       }
+      // this.filterCurrSales.isCurrencyTypeCurrency= true;
+      // this.setNavigate('isCurrencyTypeCurrency', true); 
       this.getCurrSaleList();
       this.getBroker();
       this.getCustomers();
+      
      this.setNavigate('pageId', this.filterCurrSales.pageId);
     });
     
@@ -91,6 +95,10 @@ export class SaleListComponent implements OnInit {
   }
 clearFilters(){
   this.filterCurrSales.brokerId=0;
+  this.filterCurrSales.isCurrencyTypeCurrency=false;
+  this.filterCurrSales.isCurrencyTypeBroker=false;
+  this.filterCurrSales.isCurrencyTypeMissCustomer=false;
+  this.filterCurrSales.isCurrencyTypeCommCustomer=false;
   this.filterCurrSales.customerId=0;
   this.filterCurrSales.isAccount=false;
   this.filterCurrSales.isCashed=false;
@@ -127,11 +135,12 @@ print(){
         salePricePerUnit: x.salePricePerUnit,
         transferPrice: x.transferPrice,
         transferType: x.transferType,
+        currencyType:x.currencyType
        }))
 
 });
   // dataInfo = dataInfo.forEach( x=> {x.currSaleDate = moment(x.currSaleDate, 'jYYYY/jMM/jDD').toString()} )  ;
-  console.log(dataInfo);
+  // console.log(dataInfo);
   this.reportService.addDataAndReportName(dataInfo,'ReportFilterCurrencySale.mrt');
   this.router.navigate(['sales/print']);
 // this.entitiessService.createReport().subscribe(x=>{
@@ -219,7 +228,7 @@ piDetailByCurrId(id:string){
   /** Gets the total cost of all transactions. */
   // getTotalRemaind() {
   //   return this.filterExDecSales.exDecRemaind.map(t => t.remaindPrice).reduce((acc, value) => acc + value, 0);
-  // }
+ 
 
   sumProfitLossAmount() {
     return this.filterCurrSales.entities.map(t => t.profitLossAmount).reduce((acc, value) => acc + value, 0);
@@ -229,7 +238,14 @@ piDetailByCurrId(id:string){
     return this.filterCurrSales.entities.map(t => t.transferPrice).reduce((acc, value) => acc + value, 0);
   }
 
-
+  sumTotalPrice() {
+    return this.filterCurrSales.entities.map(t => t.price).reduce((acc, value) => acc + value, 0);
+  }
+  getAvrageOfSalePricePerUnit() {
+    var currencyTypeSales = this.filterCurrSales.entities.filter(x=>x.salePricePerUnit > 0) ;
+    return currencyTypeSales.map(t => t.salePricePerUnit).reduce((acc, value)=>
+       acc + value, 0 ) / currencyTypeSales.length ;
+  }
   // getTotalSoldPrice() {
   //   return this.filterExDecSales.exDecRemaind.map(t => t.soldPrice).reduce((acc, value) => acc + value, 0);
   // }
@@ -308,6 +324,13 @@ piDetailByCurrId(id:string){
     // });
   }
   setNavigate(filterParam: string = null, value: any = null) {
+    var from =moment(this.dateFrom, 'jYYYY/jMM/jDD') ;
+    var to =moment(this.dateTo, 'jYYYY/jMM/jDD') ;
+    if (new Date(from.locale('en').format('YYYY-MM-DD')).toString() === 'Invalid Date' || 
+        new Date(to.locale('en').format('YYYY-MM-DD')).toString() === 'Invalid Date' ) {
+          this.filterCurrSales.fromDateSale = "" ;
+          this.filterCurrSales.toDateSale = "" ;
+        }
     value = (value ===undefined) || (value ===null)  ? '' : value ;  
     let pageid: number = this.filterCurrSales.pageId;
     let searchText: string = '';
@@ -321,6 +344,10 @@ piDetailByCurrId(id:string){
     let fromSaleBasePrice: number=this.filterCurrSales.fromSaleBasePrice;
     let toSaleBasePrice: number=this.filterCurrSales.toSaleBasePrice;
     let takeEntity =this.filterCurrSales.takeEntity;
+    let isCurrencyTypeCurrency:boolean=this.filterCurrSales.isCurrencyTypeCurrency;
+    let isCurrencyTypeBroker:boolean=this.filterCurrSales.isCurrencyTypeBroker;
+    let isCurrencyTypeMissCustomer:boolean=this.filterCurrSales.isCurrencyTypeMissCustomer;
+    let isCurrencyTypeCommCustomer:boolean = this.filterCurrSales.isCurrencyTypeCommCustomer
     if (filterParam !== null)
       switch (filterParam) {
         case 'pageId': {
@@ -367,6 +394,22 @@ piDetailByCurrId(id:string){
           toSaleBasePrice = value;
           break;
         }
+        case 'isCurrencyTypeCurrency': {
+          isCurrencyTypeCurrency = value;
+          break;
+        }
+        case 'isCurrencyTypeBroker': {
+          isCurrencyTypeBroker = value;
+          break;
+        }
+        case 'isCurrencyTypeMissCustomer': {
+          isCurrencyTypeMissCustomer = value;
+          break;
+        }
+        case 'isCurrencyTypeCommCustomer': {
+          isCurrencyTypeCommCustomer = value;
+          break;
+        }
       }
 
     this.router.navigate(['sales/sale-list'], {
@@ -382,7 +425,11 @@ piDetailByCurrId(id:string){
          fromDateSale:fromDateSale,
          toDateSale:toDateSale,
          fromSaleBasePrice: fromSaleBasePrice,
-         toSaleBasePrice: toSaleBasePrice
+         toSaleBasePrice: toSaleBasePrice,
+         isCurrencyTypeCurrency:isCurrencyTypeCurrency,
+         isCurrencyTypeBroker:isCurrencyTypeBroker,
+         isCurrencyTypeMissCustomer:isCurrencyTypeMissCustomer,
+         isCurrencyTypeCommCustomer:isCurrencyTypeCommCustomer
       },
     });
   }

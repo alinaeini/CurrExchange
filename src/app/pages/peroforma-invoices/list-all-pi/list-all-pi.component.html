@@ -5,9 +5,9 @@
           <div class="col-lg-7 col-md-6 col-sm-12">
             <h2>
               <font style="vertical-align: inherit"
-                ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
+                ><font style="vertical-align: inherit">جزییات فروش هر PI</font></font
               >
-            </h2>
+            </h2><br>
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="index.html"
@@ -19,7 +19,12 @@
               </li>
               <li class="breadcrumb-item active">
                 <font style="vertical-align: inherit"
-                  ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
+                  ><font style="vertical-align: inherit">پیش فاکتور (PI)</font></font
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit">جزییات فروش هر PI</font></font
                 >
               </li>
             </ul>
@@ -97,9 +102,9 @@
                           تاریخ PI
                         </th>
                         <td mat-cell *matCellDef="let element">
-                          {{ element.piDate | date:'y/MM/dd'}}
+                          {{ element.piDate | date:'y/MM/dd'}} ({{ element.piDate | jalaliPipe }}) 
                         </td>
-                        <td mat-footer-cell *matFooterCellDef></td>
+                        <td mat-footer-cell *matFooterCellDef>جمع کل :</td>
                       </ng-container>
             
                       <!-- basePrice Column -->
@@ -110,7 +115,7 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.basePrice | number  }}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>جمع کل </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getAvrageOfBasePrice() |number:'1.0-0'}} </td>
                       </ng-container>
   
                       <!-- totalPrice Column -->
@@ -121,7 +126,7 @@
                         <td mat-cell *matCellDef="let element" >
                           {{ element.totalPrice| number }}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() |number}}</td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() | number }}</td>
                       </ng-container>
 
   
@@ -133,7 +138,7 @@
                         <td mat-cell *matCellDef="let element"  >
                           {{ element.soldPrice | number}}
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>{{getTotalSoldPrice() |number}}</td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalSoldPrice() | number}}</td>
                       </ng-container>
   
                       <!-- remaindPrice Column -->
@@ -141,10 +146,23 @@
                         <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
                           مانده (درهم)
                         </th>
-                        <td mat-cell *matCellDef="let element" class="text-danger" >
-                          {{ element.remaindPrice | number}}
+                        <td mat-cell *matCellDef="let element"   [ngClass]="{'text-danger' : element.remaindPrice > 0 
+                          ,'color-gray-price' :0 === element.remaindPrice,
+                           'text-success':0 > element.remaindPrice  }" >
+                           <span *ngIf="0 > element.remaindPrice">({{element.remaindPrice *-1 | number}})</span>
+                           <span *ngIf="element.remaindPrice > 0"> {{ element.remaindPrice | number}} </span>
+                           <span *ngIf="0 === element.remaindPrice">{{element.remaindPrice  | number}}</span>
+                        <!-- 
+
+
+                         <span *ngIf="element.remaindPrice >= 0"> {{ element.remaindPrice | number}} </span>
+                         <span *ngIf="0 > element.remaindPrice"> ({{ element.remaindPrice *-1 | number}}) </span>
+                         -->
+                        <td mat-footer-cell *matFooterCellDef>
+                          <span *ngIf="0 > getTotalRemaind()"> ({{getTotalRemaind() * -1 | number}})  </span>
+                          <span *ngIf="getTotalRemaind() >= 0">{{getTotalRemaind() | number}}</span>
+                          درهم
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>{{getTotalRemaind() |number}}</td>
                       </ng-container>
               
                       <!-- operation Column -->

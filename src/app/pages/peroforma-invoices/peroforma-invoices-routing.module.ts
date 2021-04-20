@@ -19,7 +19,7 @@ const routes: Routes = [
 
   { path: 'pi-detail-create', component: CreatePiDetailComponent, canActivate: [userAuthGuard]},
   { path: 'pi-detail-edit', component: EditPiDetailComponent, canActivate: [userAuthGuard]},
-  { path: 'pi-detail-list ', component: ListPiDetailComponent, canActivate: [userAuthGuard]},
+  { path: 'pi-detail-list', component: ListPiDetailComponent, canActivate: [userAuthGuard]},
 ];
 
 @NgModule({

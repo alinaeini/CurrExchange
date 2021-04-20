@@ -10,9 +10,11 @@ import { SalePiListByCurrencysaleIdComponent } from './sale-pi-list-by-currencys
 import { SaleCustomerTotalComponent } from './sale-customer-total/sale-customer-total.component';
 import { SaleListByCustomerComponent } from './sale-list/sale-list-by-customer/sale-list-by-customer.component';
 import { PrintPageComponent } from '../print-page/print-page.component';
+import { MovingCurrencyComponent } from './moving-currency/moving-currency.component';
 
 const routes: Routes = [
   { path: '', component: SalesComponent, canActivate: [userAuthGuard]},
+  { path: 'moving-currency', component: MovingCurrencyComponent, canActivate: [userAuthGuard]},
 
   { path: 'sale-exdec-list', component: SaleExdecListComponent, canActivate: [userAuthGuard]},
   { path: 'sale-exdec-list-currSaleId', component: SaleExdecListByCurrencysaleIdComponent, canActivate: [userAuthGuard]},

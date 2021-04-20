@@ -7,7 +7,8 @@ export class ExDecRemaindDto {
     public qty: number,
     public expireDate: Date,
     public soldPrice: number,
-    public remaindPrice: number
+    public remaindPrice: number,
+    public description:string
   ) {
   }
 

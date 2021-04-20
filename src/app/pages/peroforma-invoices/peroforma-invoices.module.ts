@@ -16,6 +16,7 @@ import { PersianModule } from 'src/app/shared/modules/persian.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgxLoadingModule } from 'ngx-loading';
+import { JalalipipeModule } from 'src/app/shared/modules/jalalipipe.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { NgxLoadingModule } from 'ngx-loading';
     MaterialModule,
     PersianModule,
     SweetAlert2Module,
-    NgxLoadingModule
+    NgxLoadingModule,
+    JalalipipeModule
     
   ]
 })

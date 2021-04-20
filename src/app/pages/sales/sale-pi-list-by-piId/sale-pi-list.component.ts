@@ -16,9 +16,11 @@ export class SalePiListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     'piCode',
-    'currSaleDate',
     'brokerName',
+    'currSaleDate',
+    'sellPriceCurrency',
     'price',
+    'sellPriceCommodity',
     'customerName',
     'profitLossAmount'
   ];
@@ -62,6 +64,9 @@ export class SalePiListComponent implements OnInit {
 
       this.setNavigate('pageId', this.filterPiSales.pageId);
     });
+
+
+    
   }
 
 
@@ -78,16 +83,26 @@ export class SalePiListComponent implements OnInit {
     return this.filterPiSales.currencySaleDetailPi.map(t => t.price).reduce((acc, value) => acc + value, 0);
   }
 
-  // getTotalSoldPrice() {
-  //   return this.filterExDecSales.exDecRemaind.map(t => t.soldPrice).reduce((acc, value) => acc + value, 0);
-  // }
+  getprofitLossAmount() {
+    return this.filterPiSales.currencySaleDetailPi.map(t => t.profitLossAmount).reduce((acc, value) => acc + value, 0);
+  }
+
+  getsellPriceCurrency() {
+    return this.filterPiSales.currencySaleDetailPi.map(t => t.sellPriceCurrency).reduce((acc, value) => acc + value, 0) / this.filterPiSales.currencySaleDetailPi.length;
+  }
+
+  getsellPriceCommodity() {
+    return this.filterPiSales.currencySaleDetailPi.map(t => t.sellPriceCommodity).reduce((acc, value) => acc + value, 0) / this.filterPiSales.currencySaleDetailPi.length;
+  }
+
+
   getCurrSaleExDecList() {
     this.isLoadingData = true;
     this.currencySalesService.getFilteredCurrPiByPiId(this.filterPiSales).subscribe((result) => {
       if (result.status == 'Success') {
         this.filterPiSales = result.data;
 
-        // console.log(this.filterExDecSales.currencySaleExDecs);
+        //console.log(this.filterPiSales);
         
         //data
         this.dataSource = new MatTableDataSource(this.filterPiSales.currencySaleDetailPi);

@@ -34,7 +34,17 @@
         </div>
       </div>
       <div class="card serch-card" *ngIf="filterPiSales.currencySaleDetailPi !== null && filterPiSales.currencySaleDetailPi.length > 0">
+
         <div class="body">
+          <!-- <div class="header">
+            <h2>
+              <strong><font style="vertical-align: inherit"></font></strong>
+                  <font style="vertical-align: inherit"><font style="vertical-align: inherit">قیمت نرخ پایه درهم فروش رفته {{getsellPriceCurrency() | number}}  ریال    </font>
+                  قیمت نرخ پایه برای PI {{getsellPriceCommodity() | number}}  ریال 
+                </font>
+            </h2>
+          </div> -->
+
           <div class="form-group row">
               <div class="col-2" >
               </div>
@@ -61,6 +71,7 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.piCode }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
                       </ng-container>
                       
                       <!-- currSaleDate Column -->
@@ -71,6 +82,18 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.currSaleDate | jalaliPipe }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+                      <!-- sellPriceCurrency Column -->
+                      <ng-container matColumnDef="sellPriceCurrency">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          نرخ پایه فروش رفته ارز(درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                          {{ element.sellPriceCurrency | number }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="text-center">{{getsellPriceCurrency()| number:'1.0-0'}} درهم</td>
                       </ng-container>
 
                       <!-- brokerName Column -->
@@ -81,6 +104,7 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.brokerName  }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
                       </ng-container>
 
                       <!-- price Column -->
@@ -91,8 +115,19 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.price | number  }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() | number}} درهم</td>
                       </ng-container>
 
+                      <!-- sellPriceCommodity Column -->
+                      <ng-container matColumnDef="sellPriceCommodity">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort"  >
+                          نرخ پایه فروش رفته قیر(درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                          {{ element.sellPriceCommodity | number }}
+                        </td>
+                        <td mat-footer-cell class="text-center"  *matFooterCellDef>{{getsellPriceCommodity()| number:'1.0-0'}} درهم</td>
+                      </ng-container>
                       
                       <!-- customerName Column -->
                       <ng-container matColumnDef="customerName">
@@ -102,6 +137,7 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.customerName }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
                       </ng-container>
 
                       <!-- profitLossAmount Column -->
@@ -113,6 +149,10 @@
                           <span *ngIf="element.profitLossAmount >= 0"> {{ element.profitLossAmount | number}} ریال</span>
                           <span *ngIf="0 > element.profitLossAmount"> ({{ element.profitLossAmount *-1 | number}}) ریال </span>
                          </td>
+                          <td mat-footer-cell *matFooterCellDef>
+                            <span *ngIf="getprofitLossAmount() >= 0"> {{ getprofitLossAmount() | number}} ریال</span>
+                            <span *ngIf="0 > getprofitLossAmount()"> ({{ getprofitLossAmount()*-1 | number}}) ریال </span>
+                         </td>
                       </ng-container>
 
                   
@@ -122,10 +162,12 @@
                         <td mat-cell *matCellDef="let element">
                           {{ element.id }}
                         </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
                       </ng-container>
   
                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                     </table>
                   </div>
                 </div>

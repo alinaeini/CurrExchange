@@ -8,7 +8,7 @@ import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PiRemaindDto } from 'src/app/DTOs/Pi/PiRemaindDto';
-import { log } from 'console';
+import * as moment from 'jalali-moment';
 
 @Component({
   selector: 'app-list-pi',
@@ -20,6 +20,7 @@ export class ListPiComponent implements OnInit {
   displayedColumns: string[] = [
     'piCode',
     'piDate',
+    'customerName',
     'basePrice',
     'totalPrice',
     'soldPrice',
@@ -33,15 +34,17 @@ export class ListPiComponent implements OnInit {
     0,
     0,
     0,
-    10,
+    25,
     0,
     1,
     '',
+    '1',
     []
   );
   pages: number[] = [];
   searchText: string = '';
   Id: string = '';
+  isRemaindPriceZero:string="1";
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   isLoadingData = false;
   constructor(
@@ -70,16 +73,19 @@ export class ListPiComponent implements OnInit {
 
 
 clickOption(event){
-  
   switch (event.value) {
     case "1":
-      this.dataSource = new MatTableDataSource(this.filterPi.piRemaind.filter(x=>x.remaindPrice !== 0));
+      this.isRemaindPriceZero ="1";
+      //this.dataSource = new MatTableDataSource(this.filterPi.piRemaind.filter(x=>x.remaindPrice !== 0));
       break;
     case "2":
-      this.dataSource = new MatTableDataSource(this.filterPi.piRemaind);
+      this.isRemaindPriceZero ="2";
+      //this.dataSource = new MatTableDataSource(this.filterPi.piRemaind);
         break;
       }
+     // console.log(this.isRemaindPriceZero , event.value);
   }
+
   selectedValue(event){
     this.filterPi.takeEntity = event;
     this.setNavigate();
@@ -128,7 +134,9 @@ clickOption(event){
 
   searchButton() {
     this.setNavigate('searchText', this.searchText);
+    this.setNavigate('isRemaindPriceZero', this.isRemaindPriceZero);
     this.filterPi.searchText = this.searchText;
+    this.filterPi.isRemaindPriceZero = this.isRemaindPriceZero;
     this.getPiList();
   }
 
@@ -184,6 +192,7 @@ clickOption(event){
     let pageid: number = this.filterPi.pageId;
     let searchText: string = '';
     let idStr: string = this.Id;
+    let isRemaindPriceZero:String=this.isRemaindPriceZero;
     let takeEntity =this.filterPi.takeEntity;
     if (filterParam !== null)
       switch (filterParam) {
@@ -203,6 +212,14 @@ clickOption(event){
           takeEntity = value;
           break;
         }
+        case 'takeEntity': {
+          takeEntity = value;
+          break;
+        }
+        case 'isRemaindPriceZero': {
+          isRemaindPriceZero = value;
+          break;
+        }
       }
 
     this.router.navigate(['pies'], {
@@ -210,7 +227,8 @@ clickOption(event){
         pageId: pageid,
         searchText: searchText,
         id: idStr,
-        takeEntity:takeEntity
+        takeEntity:takeEntity,
+        isRemaindPriceZero:isRemaindPriceZero
       },
     });
   }

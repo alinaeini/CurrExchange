@@ -5,7 +5,8 @@ export class CurrentUserDto{
         public firstName:string,
         public lastName:String,
         public userRole: string,
-        public userPermissions:UserRolePermissionDto[]
+        public userPermissions:UserRolePermissionDto[],
+        public financialPeriodId:string,
     ){
 
     }

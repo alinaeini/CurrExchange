@@ -10,6 +10,7 @@ import { PiDetailDto } from '../DTOs/Pi/PiDetail/PiDetailDto';
 import { CreatePiDetailDto } from '../DTOs/Pi/PiDetail/CreatePiDetailDto';
 import { PiRemaindDto } from '../DTOs/Pi/PiRemaindDto';
 import { log } from 'console';
+import { FilterPiDetailCompleteDto } from '../DTOs/Pi/PiDetail/FilterPiDetailCompleteDto';
 @Injectable({
   providedIn: 'root',
 })
@@ -46,10 +47,11 @@ export class PiService {
       requestParams = new HttpParams()
         .set('pageId', filter.pageId.toString())
         .set('searchText', filter.searchText)
+        .set('isRemaindPriceZero',filter.isRemaindPriceZero.toString())
         .set('takeEntity', filter.takeEntity.toString());
     }
     //console.log('requestParams',requestParams);
-    //console.log(JSON.stringify(filter) );
+    // console.log(JSON.stringify(filter) );
     return this.http.get<IResponseResult<FilterPiDto>>('/pi/filter-pi', {
       params: requestParams
     });
@@ -91,6 +93,7 @@ export class PiService {
     return this.http.post<any>('/pi/create-pi-detail', pi);
   }
 
+  
   public getFilteredPiDetail(filter: FilterPiDetailDto): Observable<IResponseResult<FilterPiDetailDto>> {
     let requestParams;
     if (filter !== null) {
@@ -103,10 +106,22 @@ export class PiService {
         // console.log('filter => ',filter);
         
     }
-    return this.http.get<IResponseResult<FilterPiDetailDto>>(
-      '/pi/filter-pi-detail',
-      { params: requestParams }
-    );
+    return this.http.get<IResponseResult<FilterPiDetailDto>>('/pi/filter-pi-detail',  { params: requestParams }  );
+  }
+
+  public getPiDetailPayList(filter: FilterPiDetailCompleteDto): Observable<IResponseResult<FilterPiDetailCompleteDto>> {
+    let requestParams;
+    if (filter !== null) {
+      requestParams = new HttpParams()
+        .set('pageId', filter.pageId.toString())
+        .set('searchText', filter.searchText)
+        .set('takeEntity', filter.takeEntity.toString())
+        
+        .set("fromDateSale", filter.fromDateSale.toString())
+        .set("toDateSale", filter.toDateSale.toString())
+     
+    }
+    return this.http.get<IResponseResult<FilterPiDetailCompleteDto>>('/pi/filter-pi-detail-pay-list',  { params: requestParams }  );
   }
 
   getPiDetailById(id: string): Observable<IResponseResult<PiDetailDto>> {

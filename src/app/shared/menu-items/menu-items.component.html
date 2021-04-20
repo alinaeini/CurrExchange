@@ -1,4 +1,9 @@
 <ul class="list" >
+    <li >
+        <div *ngIf="currentFinancial!== null && currentFinancial!== undefined" class="user-info justify-content-center" style="margin-top: 10px;color:#0d07b3">
+                <h5><strong >{{currentFinancial.priodName}}</strong></h5>
+        </div>
+    </li>
     <li>
         <div class="user-info" >
             <a class="image" [routerLink]="'/profile'"><img src="assets/images/profile_av.jpg" ></a>
@@ -8,6 +13,7 @@
             </div>
         </div>
     </li>
+
     
 <div *ngIf="currentUser!== null && currentUser!== undefined && currentUser.userPermissions !== undefined && currentUser.userPermissions.length > 0 ">
     <li *ngFor="let parent of currentUser?.userPermissions;index as i">
@@ -29,7 +35,7 @@
                 
             <ul class="collapse list ul-menu" id="subMenu{{i}}">
                 <li *ngFor="let itemSelected of parent.detaiList">
-                    <a   [routerLink]="itemSelected.accessLink" [title]="itemSelected.persianName"><i class="zmdi zmdi-blur-circular"></i> <span> {{itemSelected.persianName}}</span></a> 
+                    <a   [routerLink]="[itemSelected.accessLink]" [title]="itemSelected.persianName"><i class="zmdi zmdi-blur-circular"></i> <span> {{itemSelected.persianName}}</span></a> 
                 </li>
             </ul>
         </div>

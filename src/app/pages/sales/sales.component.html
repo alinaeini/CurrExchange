@@ -37,7 +37,17 @@
       </div>
       
       <div class="row clearfix" *ngIf="brokers !== null">
-            <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let broker of brokers"><div class="card widget_2 small_icon domains "><div  class="body"><h4 ><font ><strong> {{broker.name}} ({{broker.title}})</strong></font></h4><h2 _ngcontent-qll-c185=""><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;">{{getPercent(broker.id)}} </font></font><small _ngcontent-qll-c185="" class="info"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;">درصد (موجودی فعلی)</font></font></small></h2><h3 _ngcontent-rmu-c185=""><strong> <font ><font >موجودی  : {{broker.accountBalance |number}} درهم</font></font></strong></h3><div  class="progress"><div  role="progressbar" [class]="this.getPercent(broker.id) > 50  ?  'progress-bar l-blue' : 'progress-bar l-amber'" style.width={{this.getPercent(broker.id)}}%></div></div></div></div></div>
+            <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let broker of brokers">
+              <div class="card widget_2 small_icon domains "><div  class="body"><h4 ><font >
+                <strong> {{broker.name}} ({{broker.title}})</strong></font></h4>
+                <h2 _ngcontent-qll-c185=""><font _ngcontent-qll-c185="" style="vertical-align: inherit;">
+                  <font _ngcontent-qll-c185="" style="vertical-align: inherit;">{{getPercent(broker.id)}} </font></font>
+                  <small _ngcontent-qll-c185="" class="info"><font _ngcontent-qll-c185="" style="vertical-align: inherit;">
+                    <font _ngcontent-qll-c185="" style="vertical-align: inherit;">درصد (موجودی فعلی)</font></font></small></h2>
+                    <h3 _ngcontent-rmu-c185=""><strong> <font ><font >
+                      <span *ngIf="0 > broker.accountBalance" >موجودی  : ({{broker.accountBalance * -1 |number}})درهم  </span>
+                      <span *ngIf="broker.accountBalance >= 0"> موجودی  : {{broker.accountBalance |number}} درهم</span>
+                    </font></font></strong></h3><div  class="progress"><div  role="progressbar" [class]="this.getPercent(broker.id) > 50  ?  'progress-bar l-blue' : 'progress-bar l-amber'" style.width={{this.getPercent(broker.id)}}%></div></div></div></div></div>
             <div class="col-lg-4 col-md-6 col-sm-12" ><div class="card widget_2 small_icon domains "><div  class="body"><h3 ><font ><strong> موجودی نزد تمام کارگزاران</strong></font></h3><h2 _ngcontent-qll-c185=""><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"></font></font><small _ngcontent-qll-c185="" class="info"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"> 100 درصد</font></font></small></h2><h3 _ngcontent-rmu-c185=""><strong> <font ><font >موجودی کل  : {{sumBrokers() |number}} درهم</font></font></strong></h3><div  class="progress"><div  role="progressbar" class="progress-bar l-green" style="width:100%"></div></div></div></div></div>
       </div>
 
@@ -54,6 +64,8 @@
                     </h2>
                 </div>
                     <div class="body">
+
+
                         <div
                         class="alert alert-success"
                         role="alert" *ngIf="isLoadingSuccess"  >
@@ -64,8 +76,8 @@
                               <mat-form-field class="form-group form-float input-group form-control">
                                   <mat-label>نام صرافی(مشتری) مورد نظر را وارد کنید</mat-label>
                                   <input type="text"
-                                          aria-label="Number"
                                           matInput
+                                          [(ngModel)]="customerId"
                                           [formControl]="myControl"
                                           [matAutocomplete]="auto">
                                       <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" 
@@ -124,7 +136,7 @@
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <select  class="form-control" formControlName="brokerId" [(ngModel)]="brokerId" >
-                                        <option  value="0">لطفا کارزار را انتخاب کنید</option>
+                                        <option  selected value="0">لطفا کارزار را انتخاب کنید</option>
                                         <option  *ngFor="let item of brokers" [value]="item.id">{{item.title }}</option>
                                         </select>
                                     </div>
@@ -139,14 +151,14 @@
                                 <div class="col-md-5">
                                     <div class="form-group ">
                                         <select  class="form-control" formControlName="transferType" [(ngModel)]="TransferType"  >
-                                            <option  value='0' >لطفا نوع پرداخت را مشخص کنید</option>
+                                            <option  value='0' selected >لطفا نحوه پرداخت را مشخص کنید</option>
                                             <option  value='1'>نقدی</option>
                                             <option  value='2'>تو حسابی</option>
                                         </select>
                                     </div>
                                     <p class="text-danger"
-                                    *ngIf="TransferType === '0' && salesForm.controls.transferType.touched ">
-                                         لطفا نوع پرداخت را مشخص کنید  
+                                    *ngIf="TransferType === '0' && salesForm.controls.transferType.touched">
+                                         لطفا نحوه پرداخت را مشخص کنید  
                                     </p>
                                 </div>
                           </div>
@@ -175,7 +187,7 @@
                             </div>
                             <div class="col-md-5">
                               <div class="form-group form-float input-group disabled">
-                                <input type="text" class="form-control"  onkeyup="separateNum(this.value,this);"  [value]="this.transferPrice|number"
+                                <input type="text" class="form-control" formControlName="transferPrice"  onkeyup="separateNum(this.value,this);"  [value]="transferPrice | number:'1.0-0'"
                                   placeholder="نرخ کارمزر" title="نرخ کارمزر"  >
                                 <span class="input-group-text" >درهم</span>
                               </div>
@@ -264,7 +276,7 @@
                                           [formControl]="exDecControl"
                                           [matAutocomplete]="auto2">
                                       <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete" 
-                                            [displayWith]="getExdecCode.bind(this)"  >
+                                            [displayWith]="getExdecCode.bind(this)" >
                                       <mat-option *ngFor="let option of filteredOptionsExdec | async"  [value]="option.id">
                                         <small> {{option.exCode }} ( مانده : {{option.remaindPrice |number}} ) </small>
                                       </mat-option>
@@ -301,7 +313,7 @@
                                 && salesForm.controls.description.touched" >
                                         {{ErrorCaractersisMoreThanMax}}
                             </p>
-                          <button class="btn  btn-primary waves-effect btn-block"   type="submit" >
+                          <button class="btn  btn-primary waves-effect btn-block"   [disabled]="salesForm.invalid" type="submit" id="submit"  >
                           <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  ثبت </font></font> 
                           </button>
                         </form>
@@ -327,3 +339,26 @@ confirmButtonText = "قبول"
 </swal>
 
 
+<swal #sweetAlert_Success
+title="موفقیت"
+text=""
+icon="info"
+Height="20px"
+Width="30px"
+confirmButtonText = "قبول"
+[showCancelButton]="false"
+[focusCancel]="false">
+</swal>
+
+<swal
+#sweetAlert_Warning
+title="سوال"
+text="آیا از فروش ارز مطمئن هستید ؟"
+icon="warning"
+Height="20px"
+Width="30px"
+confirmButtonText="بلی"
+cancelButtonText="خیر"
+[showCancelButton]="true"
+>
+</swal>

@@ -60,26 +60,29 @@
                              </p>
 
                               <div class="form-group form-float input-group">
-                                  <input type="text" class="form-control" onkeyup="separateNum(this.value,this);" placeholder="مقدار درهم"  formControlName="price">
+                                  <input type="text" class="form-control" onkeyup="separateNum(this.value,this);" (keyup)="calcAED()" placeholder="مقدار دلار"  formControlName="price">
+                                  <span class="input-group-text">دلار</span>
+                              </div>
+                              <p class = "text-danger" *ngIf="exDecForm.controls.price.errors?.required
+                              && exDecForm.controls.price.touched" >
+                               لطفا مقدار دلار  را وارد کنید
+                             </p>
+
+                              <div class="form-group form-float input-group">
+                                  <input type="text" class="form-control" onkeyup="separateNum(this.value,this);" disabled placeholder="مقدار درهم"  formControlName="priceAED">
                                   <span class="input-group-text">درهم</span>
                               </div>
                               <p class = "text-danger" *ngIf="exDecForm.controls.price.errors?.required
                               && exDecForm.controls.price.touched" >
-                               لطفا مقدار درهم  را وارد کنید
-                             </p>
+                              لطفا مقدار درهم  را وارد کنید
+                              </p>
+
                               <div class="form-group form-float">
-                                  <input type="text" class="form-control" placeholder="مقدار تناژ" formControlName="qty">
-                              </div>
-                              <p class = "text-danger" *ngIf="exDecForm.controls.qty.errors?.required
-                              && exDecForm.controls.qty.touched" >
-                               لطفا مقدار تناژ  را وارد کنید
-                             </p>
-                              <div >
-                                <input class="form-control ng-pristine" [(ngModel)]="exprireDate" type="text" 
-                                placeholder="تاریخ فروش "  formControlName="exprireDate" #datepickerInput/>
-                                <p class = "text-danger" *ngIf="exDecForm.controls.exprireDate.errors?.required
-                                && exDecForm.controls.exprireDate.touched" >
-                                    لطفا تاریخ اعتبار اظهارنامه  را وارد کنید
+                                <input type="text" class="form-control"  [(ngModel)]="exprireDate" type="text" 
+                                    placeholder="تاریخ اظهارنامه "  formControlName="exprireDate" #datepickerInput>
+
+                                <p class = "text-danger" *ngIf="exprireDate === null  && exDecForm.controls.exprireDate.touched" >
+                                    لطفا تاریخ اظهارنامه  را وارد کنید
                                 </p>
                                 <ng-persian-datepicker
                                         [input]="datepickerInput"
@@ -91,7 +94,34 @@
                                         [dateOnSelect] ="selectedValuesFromPickupDate"
                                         [dateInitValue]="false"       >
                                 </ng-persian-datepicker>
-                            </div>
+
+                              </div>
+  
+
+                              <div class="form-group form-float">
+                                  <input type="text" class="form-control" placeholder="مقدار تناژ" formControlName="qty">
+                              </div>
+                              <p class = "text-danger" *ngIf="exDecForm.controls.qty.errors?.required
+                              && exDecForm.controls.qty.touched" >
+                               لطفا مقدار تناژ  را وارد کنید
+                             </p>
+
+                                <div class="form-float">
+                                  <div class="form-group form-float">
+                                    <textarea name="description" cols="30" rows="5"  placeholder="شرح" class="form-control no-resize" formControlName="description"></textarea>
+                                  </div>
+                                  <p class = "text-danger" *ngIf="exDecForm.controls.description.errors?.required
+                                      && exDecForm.controls.description.touched" >
+                                      لطفا شرح  را وارد کنید
+                                  </p>
+                                  <p class = "text-danger" *ngIf="exDecForm.controls.description.errors?.maxlength
+                                      && exDecForm.controls.description.touched" >
+                                                  {{ErrorCaractersisMoreThanMax}}
+                                  </p>
+                                </div> 
+
+
+   
 
                               <button class="btn  btn-primary waves-effect btn-block" [disabled]="exDecForm.invalid"   type="submit" >
                                 <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ثبت </font></font> 

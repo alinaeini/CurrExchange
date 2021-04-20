@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
+import { TableExporter } from 'src/app/shared/Export/TableExporter';
 import { FilterCurrencyCustomerDto } from '../../../DTOs/Customer/FilterCurrencyCustomerDto';
 import { CurrencySalesService } from '../../../Services/currency-sales.service';
 
@@ -134,7 +135,9 @@ export class SaleCustomerTotalComponent implements OnInit {
   }
 
 
-
+  exportNormalTable() {
+    TableExporter.exportToExcel("ExampleMaterialTable");
+  }
 
   setNavigate(filterParam: string = null, value: any = null) {
     let pageid: number = this.filterCustomer.pageId;

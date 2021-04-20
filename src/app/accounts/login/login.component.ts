@@ -15,6 +15,8 @@ import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { CurrentUserDto } from 'src/app/DTOs/Account/CurrentUserDto';
 import { CompanyInfoService } from '../../Services/company-info.service';
 import { DomainName } from 'src/app/Utilities/pathTools';
+import { FinancialPeriodDto } from '../../DTOs/Account/FinancialPeriodDto';
+import { FinancialPeriodService } from '../../Services/financial-period.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,9 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   public loginForm: FormGroup;
   user: CurrentUserDto = null;
+  currentFinancial: FinancialPeriodDto = null;
+  financial: FinancialPeriodDto[]=[];
+  financialPeriodId:string = '2' ;
   public domain: string = DomainName;
   ErrorCaractersisMoreThanMax: string =
     ' تعداد کاراکترها نمیتواند بیشتر از حد مجاز باشد';
@@ -35,10 +40,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthorizationService,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private financialService : FinancialPeriodService
   ) {}
 
+  
   ngOnInit(): void {
+    this.isLoading =true ;
     this.authService.getCurrentUser().subscribe((res) => {
       this.user = res;
       // console.log(res);
@@ -48,7 +56,12 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       }
     });
-
+    this.financialService.getFinancialList().subscribe( res =>{
+      if (res.status === 'Success') {
+        this.financial = res.data;
+        this.isLoading =false ;
+      }    
+    });
     this.loginForm = new FormGroup({
       userName: new FormControl(null, [
         Validators.required,
@@ -57,6 +70,9 @@ export class LoginComponent implements OnInit {
       password: new FormControl(null, [
         Validators.required,
         Validators.maxLength(100),
+      ]),
+      financialId: new FormControl(null, [
+        Validators.required,
       ]),
     });
   }
@@ -70,10 +86,15 @@ export class LoginComponent implements OnInit {
   }
 
   submitloginForm() {
+    
     var loginForm = new LoginUserDto(
       this.loginForm.controls.userName.value,
-      this.loginForm.controls.password.value
+      this.loginForm.controls.password.value,
+      this.financialPeriodId.toString()
     );
+    // 
+  //  console.log(loginForm);
+    
     this.isLoading = true;
     this.authService.loginUserService(loginForm).subscribe((res) => {
       // console.log(res);
@@ -83,14 +104,22 @@ export class LoginComponent implements OnInit {
           res.data.firstName,
           res.data.lastName,
           res.data.userRole,
-          res.data.userPermissions
+          res.data.userPermissions,
+          this.financialPeriodId
         );
-        this.cookieService.set(
-          'exchange-curr-cookie',
-          res.data.token,
-          res.data.expireTime *60
-        );
+        //console.log( res.data.userPermissions);
+        
+        this.cookieService.set('exchange-curr-cookie',res.data.token,res.data.expireTime * 60);
         this.authService.setCurrentUser(currentUser);
+        this.financialService.getFinancialById(currentUser.financialPeriodId.toString()).
+          subscribe( res =>{
+                  if (res.status === 'Success') {
+                    this.currentFinancial = res.data;
+                    this.financialService.setFinancialByIdBehaviorSubject(this.currentFinancial);
+                    
+                    
+                  }    
+                 }); 
         // console.log(currentUser);
 
         // this.callEvent(currentUser);

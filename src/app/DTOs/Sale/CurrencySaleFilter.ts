@@ -12,7 +12,8 @@ export class CurrencySaleFilter extends FilterGenericDto<CurrencySaleDto> implem
     toDateSale: string;
     fromSaleBasePrice: number;
     toSaleBasePrice: number;
-
-
-
+    isCurrencyTypeCurrency:boolean;
+    isCurrencyTypeBroker:boolean;
+    isCurrencyTypeMissCustomer:boolean;
+    isCurrencyTypeCommCustomer:boolean ;
 }

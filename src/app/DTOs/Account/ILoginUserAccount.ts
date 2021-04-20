@@ -9,7 +9,8 @@ export interface ILoginUserAccount{
         userId:number,
         userRole:string,
         userPermissions:UserRolePermissionDto[]
-        info:string
+        info:string,
+        financialPeriodId:string
     }
 }
 

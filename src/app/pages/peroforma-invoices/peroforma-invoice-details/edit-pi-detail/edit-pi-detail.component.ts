@@ -157,14 +157,14 @@ export class EditPiDetailComponent implements OnInit {
         this.piDetailForm.controls.depositPrice.value
       );
     else var depositPrice = '0';
-    if ((parseInt(depositPrice) > this.currentPi.totalPrice) || 
-        (parseInt(depositPrice) > (this.currentPi.totalPrice - this.getTotalPrice()))) 
-    {
-      this.sweetAlert.text =
-        'مبلغ وارد شده بیشتراز مبلغ کل PI میباشد';
-      this.sweetAlert.fire();
-    } 
-    else 
+    // if ((parseInt(depositPrice) > this.currentPi.totalPrice) || 
+    //     (parseInt(depositPrice) > (this.currentPi.totalPrice - this.getTotalPrice()))) 
+    // {
+    //   this.sweetAlert.text =
+    //     'مبلغ وارد شده بیشتراز مبلغ کل PI میباشد';
+    //   this.sweetAlert.fire();
+    // } 
+    // else 
     {
       this.isLoading = true;
       // console.log(this.piDetailId );

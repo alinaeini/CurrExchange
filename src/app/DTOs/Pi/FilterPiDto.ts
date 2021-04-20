@@ -11,6 +11,7 @@ export class FilterPiDto {
     public skipEntity: number,
     public activePage: number,
     public searchText: string = '',
+    public isRemaindPriceZero:string='',
     public piRemaind: PiRemaindDto[]
 
   ) { }

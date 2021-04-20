@@ -34,6 +34,9 @@ export class ListExdecAllComponent implements OnInit {
     0,
     1,
     '',
+    '',
+    '',
+    '',
     []
   );
   pages: number[] = [];

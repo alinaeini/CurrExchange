@@ -12,7 +12,9 @@ export class FilterExDecDto {
     public skipEntity: number,
     public activePage: number,
     public searchText: string = '',
+    public fromDateSale : string= '', 
+    public toDateSale : string = '',
+    public isRemaindPriceZero : string= '', 
     public exDecRemaind: ExDecRemaindDto[]
-
   ) { }
 }

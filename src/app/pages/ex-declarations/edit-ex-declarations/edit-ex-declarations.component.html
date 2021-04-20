@@ -39,6 +39,25 @@
                              لطفا شماره سریال اظهارنامه  را وارد کنید
                            </p>
 
+                           <div class="form-group form-float">
+                            <input type="text" class="form-control"  [(ngModel)]="exprireDate" type="text" 
+                                placeholder="تاریخ اظهارنامه "  formControlName="exprireDate" #datepickerInput>
+                            <p class = "text-danger" *ngIf="exprireDate === null  && exdecFrom.controls.exprireDate.touched" >
+                                لطفا تاریخ اظهارنامه  را وارد کنید
+                            </p>
+                            <ng-persian-datepicker
+                                    [input]="datepickerInput"
+                                    [uiTheme]="'default'"
+                                    class="form-group form-float"
+                                    [timeEnable]="false"
+                                    [dateFormat]="'jYYYY-jMM-jDD'"
+                                    [dateInitValue] ="true"
+                                    [dateOnSelect] ="selectedValuesFromPickupDate"
+                                    [dateInitValue]="false"       >
+                            </ng-persian-datepicker>
+
+                          </div>
+
                             <div class="form-group form-float input-group">
                                 <input type="text" class="form-control" onkeyup="separateNum(this.value,this);" placeholder="مقدار درهم"  formControlName="price">
                                 <span class="input-group-text">درهم</span>
@@ -54,28 +73,21 @@
                             && exdecFrom.controls.qty.touched" >
                              لطفا مقدار تناژ  را وارد کنید
                            </p>
-                            <div >
-                            <input class="form-control ng-pristine" [(ngModel)]="exprireDate" type="text" 
-                            placeholder="تاریخ اعتبار اظهارنامه"  formControlName="exprireDate" #datepickerInput/>
-                            <p class = "text-danger" *ngIf="exdecFrom.controls.exprireDate.errors?.required
-                            && exdecFrom.controls.exprireDate.touched" >
-                             لطفا تاریخ اعتبار اظهارنامه را وارد کنید
-                           </p>
-                            <ng-persian-datepicker
-                                  [input]="datepickerInput"
-                                  [uiTheme]="'default'"
-                                  class="form-group form-float"
-                                  [timeEnable]="false"
-                                  [dateFormat]="'jYYYY-jMM-jDD'"
-                                  [dateInitValue] ="true"
-                                  [dateOnSelect] ="selectedValuesFromPickupDate"
-                                  [dateInitValue]="false"
-                                  >
-                           </ng-persian-datepicker>
+                           
+                        
+                          <div class="form-group form-float">
+                            <textarea name="description" cols="30" rows="5" placeholder="شرح" class="form-control no-resize" formControlName="description"></textarea>
+                        </div>
+                        <p class = "text-danger" *ngIf="exdecFrom.controls.description.errors?.required
+                        && exdecFrom.controls.description.touched" >
+                         لطفا شرح  را وارد کنید
+                       </p>
+                       <p class = "text-danger" *ngIf="exdecFrom.controls.description.errors?.maxlength
+                            && exdecFrom.controls.description.touched" >
+                                        {{ErrorCaractersisMoreThanMax}}
+                        </p>
 
-                          </div>
-
-                            <button class="btn  btn-primary waves-effect btn-block"   type="submit" >
+                            <button class="btn  btn-primary waves-effect btn-block" [disabled]="exdecFrom.invalid"   type="submit" >
                               <font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ثبت </font></font> 
                             </button>
                         </form>

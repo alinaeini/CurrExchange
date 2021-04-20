@@ -1,3 +1,4 @@
+import { CurrencyType } from './CurrencyType';
 export class CurrencySaleDto {
     constructor(
         public id: number,
@@ -9,7 +10,8 @@ export class CurrencySaleDto {
         public customerName: string,
         public salePricePerUnit:number,
         public transferPrice:number,
-        public transferType:number
+        public transferType:number,
+        public currencyType :CurrencyType
          
     ) { }
 }
@@ -26,7 +28,8 @@ export class CurrencySaleToReportDto {
         public customerName: string,
         public salePricePerUnit:number,
         public transferPrice:number,
-        public transferType:number
+        public transferType:number,
+        public currencyType :number
          
     ) { }
 }

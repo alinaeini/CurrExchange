@@ -1,1 +1,284 @@
-<p>list-pi-detail works!</p>
+<section class="content">
+    <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              <font style="vertical-align: inherit"
+                ><font style="vertical-align: inherit">لیست واریز وجه </font></font
+              >
+            </h2><br>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="index.html"
+                  ><i class="zmdi zmdi-home"></i
+                  ><font style="vertical-align: inherit"
+                    ><font style="vertical-align: inherit"> مدیریت فروش ارز</font></font
+                  ></a
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit">پیش فاکتور (PI)</font></font
+                >
+              </li>
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit"> لیست واریز وجه </font></font
+                >
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-icon mobile_menu" type="button">
+              <i class="zmdi zmdi-sort-amount-desc"></i>
+            </button>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/'"  >
+              <i class="zmdi zmdi-arrow-right"></i></a>
+            <a
+              class="btn btn-success btn-icon float-right"
+              [routerLink]="'/pies/pi-create'"
+              ><i class="zmdi zmdi-plus"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div class="card serch-card">
+        <div class="body">
+          <div class=" row">
+          <div class="col-2" >
+          </div>
+          <mat-form-field class="col-7">
+            <mat-label>جستجو بر اساس  PI , واریزی مشتری (درهم) ,مقدار فروش رفته (درهم),کارگزار دریافت کننده ....</mat-label>
+            <input persianNumber matInput  placeholder="متن خود را وارد کنید " [(ngModel)] = "searchText" (keyup)="onKey($event)"/>
+          </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col-2 " >
+        </div>
+
+        <div class="form-group form-float input-group col-7 ">
+            <div class="form-group col-3" >
+                <input class="ng-pristine" placeholder="از تاریخ واریز" [(ngModel)]="dateFrom" type="text" 
+                #datepickerInputFrom/>
+                <!-- <p class = "text-danger"  >
+                    لطفا تاریخ فروش  را وارد کنید
+                </p> -->
+                <ng-persian-datepicker
+                [input]="datepickerInputFrom"
+                [uiTheme]="'default'"
+                [timeEnable]="false"
+                [dateFormat]="'jYYYY-jMM-jDD'"
+                [dateInitValue] ="true"
+                [dateInitValue]="false" >
+                </ng-persian-datepicker>
+            </div>
+            <div class="form-group col-4" ></div>
+            <div class="form-group col-2" >
+                <input class="ng-pristine" placeholder="تا تاریخ واریز" [(ngModel)]="dateTo" type="text" 
+                  #datepickerInputTo/>
+                <ng-persian-datepicker
+                [input]="datepickerInputTo"
+                [uiTheme]="'default'"
+                [timeEnable]="false"
+                [dateFormat]="'jYYYY-jMM-jDD'"
+                [dateInitValue] ="true"
+                [dateInitValue]="false" >
+                </ng-persian-datepicker>
+            </div>
+            <p class = "text-danger form-group form-float input-group" *ngIf="dateFrom !== '' &&  dateTo ==='' " >
+              لطفا تا تاریخ واریز  را وارد کنید
+            </p>
+        </div>
+
+        <button mat-mini-fab color="gray" class="btn btn-primary mb-1 margin-top"  (click)="searchButton()">
+          <mat-icon>search</mat-icon>
+        </button>&nbsp;&nbsp;
+        <button mat-mini-fab color="warn" class="btn btn-primary mb-1 margin-top"  (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+        </button>
+        
+        <div class="col-1" >
+        </div>
+
+        <div class="d-inline-block">
+          <button  mat-icon-button  (click)="exportNormalTable()" title="خروجی اکسل">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2M18 20H6V4H13V9H18V20M12.9 14.5L15.8 19H14L12 15.6L10 19H8.2L11.1 14.5L8.2 10H10L12 13.4L14 10H15.8L12.9 14.5Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+          <div class="container-fluid">
+            <div class="row clearfix">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="table-border table-secondary div-table">
+                    <table id="ExampleMaterialTable" mat-table [dataSource]="this.dataSource" matSort *ngIf="this.dataSource !== null"
+                      class="table table-striped table-hover align-middle" >
+                    
+                      <!-- customerName Column -->
+                      <ng-container matColumnDef="customerName">
+                        <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort">
+                          نام مشتری
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.customerName }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+                      
+                      <!-- piCode Column -->
+                      <ng-container matColumnDef="piCode">
+                        <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort">
+                          کد PI
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.piCode }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+
+                      <!-- piDate Column -->
+                      <ng-container matColumnDef="depositDate">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          تاریخ واریز
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.depositDate | date:'y/MM/dd'}} ({{ element.depositDate | jalaliPipe }}) 
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container> 
+
+
+
+                      <!-- basePrice Column -->
+                      <ng-container matColumnDef="brokerName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          کارگزار دریافت کننده
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.brokerName}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>جمع کل </td>
+                      </ng-container>
+  
+                      <!-- totalPrice Column -->
+                      <ng-container matColumnDef="totalPrice">
+                        <th mat-header-cell   *matHeaderCellDef   mat-sort-header  class="headersort" >
+                          مقدار فروش رفته(PI) (درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element" >
+                          {{ element.totalPrice| number }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() |number}} درهم</td>
+                      </ng-container>
+
+  
+                      <!-- soldPrice Column -->
+                      <ng-container matColumnDef="depositPrice">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          واریزی مشتری (درهم)
+                        </th>
+                        <td mat-cell *matCellDef="let element"  >
+                          {{ element.depositPrice | number}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{getTotalDepositPrice() |number}} درهم</td>
+                      </ng-container>
+  
+                      <!-- remaindPrice Column -->
+                      <ng-container matColumnDef="isSold">
+                        <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
+                          وضعیت
+                        </th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{'text-danger' : element.isSold 
+                          ,'text-success':!element.isSold   }" >
+                           <span *ngIf="element.isSold">فروخته شده</span>
+                           <span *ngIf="!element.isSold ">هنوز فروخته نشده</span>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>      </td>
+                      </ng-container>
+                      
+  
+                      <!-- id Column -->
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell  *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.id }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns" ></tr>
+                      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="margin-bottom">
+                  <div class="d-inline-block col-9">
+                    <ul class="pagination pagination-primary m-b-0">
+                      <li class="page-item" (click)="setFirstPage()">
+                        <a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a>
+                      </li>
+                      <li class="page-item"   [ngClass]="{ active: page === filterPiPayList.activePage }" (click)="setPage(page)"  *ngFor="let page of pages">
+                        <a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit">
+                            <font style="vertical-align: inherit">{{  page }}</font></font></a   >
+                      </li>
+                      <!-- <li class="page-item active"><a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ page }}</font></font></a></li> -->
+                      <li class="page-item" (click)="setLastPage()">
+                        <a class="page-link"
+                          ><i class="zmdi zmdi-arrow-right"></i ></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="d-inline-block col-3 ">
+                      <mat-form-field appearance="fill" class="form-control">
+                        <mat-label>نمایش نتایج</mat-label>
+                        <mat-select (value)="filterPiPayList.takeEntity" (selectionChange)="selectedValue($event.value)" >
+                          <mat-option value=10>10</mat-option>
+                          <mat-option value=25>25</mat-option>
+                          <mat-option value=50>50</mat-option>
+                          <mat-option value=100>100</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card serch-card" *ngIf="filterPi.piRemaind === null || filterPi.piRemaind.length === 0">
+          <div class="body">
+              <div class="form-group text-center">
+                 <h2 class="text-primary">هیچ PI  که مشتری کامل پرداخت نکرده در سیستم وجود ندارد</h2>
+              </div>
+          </div>
+      </div> -->
+    </div>
+
+  </section>
+  
+
+
+  <ngx-loading
+    [show]="isLoadingData"
+    [config]="{ animationType: ngxLoadingAnimationTypes.wanderingCubes }"
+  ></ngx-loading>
+  
+  <swal
+    #sweetAlert
+    title="سوال"
+    text="آیا میخواهید پیش فاکتور مورد نظر حذف شود ؟"
+    icon="warning"
+    Height="20px"
+    Width="30px"
+    confirmButtonText="بلی"
+    cancelButtonText="خیر"
+    [showCancelButton]="true"
+  >
+  </swal>
+  

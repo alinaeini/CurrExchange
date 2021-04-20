@@ -1,20 +1,18 @@
-import { HttpParams } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
-import { FilterCustomerDto } from '../../../../DTOs/Customer/FilterCustomerDto';
-import { CustomerService } from '../../../../Services/customer.service';
+import { FilterCustomerDto } from 'src/app/DTOs/Customer/FilterCustomerDto';
+import { MiscellaneousCustomerService } from '../../../../Services/miscellaneous-customer.service';
 
 @Component({
-  selector: 'app-customer-list',
-  templateUrl: './customer-list.component.html',
-  styleUrls: ['./customer-list.component.scss'],
+  selector: 'app-list-mis-customer',
+  templateUrl: './list-mis-customer.component.html',
+  styleUrls: ['./list-mis-customer.component.scss']
 })
-export class CustomerListComponent implements OnInit {
+export class ListMisCustomerComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     'name',
@@ -42,7 +40,7 @@ export class CustomerListComponent implements OnInit {
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   isLoadingData =false;
   constructor(
-    private customerService: CustomerService,
+    private miscellaneousCustomerService: MiscellaneousCustomerService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -67,7 +65,7 @@ export class CustomerListComponent implements OnInit {
   }
   getCustomerList() {
     this.isLoadingData=true;
-    this.customerService
+    this.miscellaneousCustomerService
       .getFilteredCustomer(this.filterCustomer)
       .subscribe((result) => {
         this.filterCustomer = result.data;
@@ -119,7 +117,7 @@ export class CustomerListComponent implements OnInit {
   editFromList(id: string) {
     this.Id = id;
     this.setNavigate('id', this.Id);
-    this.router.navigate(["customers/customer-edit"], 
+    this.router.navigate(["customers/edit-mis-customer"], 
     {queryParams: 
             { id: this.Id } 
     }); 
@@ -129,7 +127,7 @@ export class CustomerListComponent implements OnInit {
     this.sweetAlert.fire().then((result)=>{
       if(result.isConfirmed){
         this.isLoadingData =true;
-        this.customerService.deleteCustomerById(id).subscribe(res =>{
+        this.miscellaneousCustomerService.deleteCustomerById(id).subscribe(res =>{
           console.log(res);
           
           if (res.status ==="Success"){
@@ -169,7 +167,7 @@ export class CustomerListComponent implements OnInit {
         }
       }
 
-    this.router.navigate(['customers'], {
+    this.router.navigate(['customers/list-mis-customer'], {
       queryParams: {
         pageId: pageid,
         searchText: searchText,
@@ -178,4 +176,5 @@ export class CustomerListComponent implements OnInit {
       },
     });
   }
+
 }

@@ -27,7 +27,7 @@ export class ExDeclarationsComponent implements OnInit {
   ErrorCaractersisMoreThanMax: string = " تعداد کاراکترها نمیتواند بیشتر از حد مجاز باشد";
 
   @ViewChild("sweetAlert") private sweetAlert: SwalComponent;
-  exprireDate: string = "تاریخ اعتبار اظهارنامه";
+  exprireDate: string = "تاریخ اظهارنامه";
   gregorianDate:string="";
   constructor(private exService: ExDeclarationService ) { }
 
@@ -39,23 +39,37 @@ export class ExDeclarationsComponent implements OnInit {
       price: new FormControl(null, [
         Validators.required,
       ]),
+      priceAED: new FormControl(null),
       qty: new FormControl(null, [
        Validators.required,
       ]),
       exprireDate: new FormControl(null, [
         Validators.required,
       ]),
-
+      description: new FormControl(null, [
+        Validators.required,
+      ]),
     });
   }
   selectedValuesFromPickupDate(shamsiDate: string, gregorianDate: string, timestamp: number){
     this.exprireDate = gregorianDate ;
   }
+  calcAED(){
 
+    // console.log(this.exDecForm.controls.price.value);
+    
+    if(this.exDecForm.controls.price.value !== null && this.exDecForm.controls.price.value !== "")
+    var price = Math.round((parseInt(this.ex_normalNum(this.exDecForm.controls.price.value))*3.67));
+    else
+    var price =0;
+
+    this.exDecForm.controls.priceAED.setValue(price.toLocaleString('en-GB'));
+    
+  }
   submitExForm() {
     this.isLoading=true ;
-    if(this.exDecForm.controls.price.value !== null)
-    var price =this.ex_normalNum(this.exDecForm.controls.price.value);
+    if(this.exDecForm.controls.priceAED.value !== null)
+    var price =this.ex_normalNum(this.exDecForm.controls.priceAED.value);
     else
     var price ="0";
 
@@ -67,9 +81,11 @@ export class ExDeclarationsComponent implements OnInit {
       this.exDecForm.controls.exchangeDeclarationCode.value,
       parseInt( price),
       parseInt(this.exDecForm.controls.qty.value),
-      new Date(gregorianDate)
+      new Date(gregorianDate),
+      this.exDecForm.controls.description.value
     );
  
+    // console.log(JSON.stringify(exDeclaration));
 
     this.exService.createExDecService(exDeclaration).subscribe((res) => {
       this.isLoading=false ;

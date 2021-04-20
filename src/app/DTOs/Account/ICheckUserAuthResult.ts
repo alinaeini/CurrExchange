@@ -7,6 +7,7 @@ export interface ICheckUserAuthResult {
     lastName: string,
     userName: string,
     userRole:string,
-    userPermissions:UserRolePermissionDto[]
+    userPermissions:UserRolePermissionDto[],
+    financialPeriodId:string
   };
 }

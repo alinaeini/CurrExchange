@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterCurrSaleCustomerListDto } from 'src/app/DTOs/Sale/FilterCurrSaleDto';
 import { CurrencySalesService } from 'src/app/Services/currency-sales.service';
+import { TableExporter } from '../../../../shared/Export/TableExporter';
 
 @Component({
   selector: 'app-sale-list-by-customer',
@@ -72,7 +73,9 @@ export class SaleListByCustomerComponent implements OnInit {
 //       this.Id= id;
 //       this.router.navigate(['sales/sale-pi-list-currSaleId'], { queryParams: { id: this.Id } });
 // }
-
+exportNormalTable() {
+  TableExporter.exportToExcel("ExampleMaterialTable");
+}
   selectedValue(event){
     this.filterCurrSales.takeEntity = event;
     this.setNavigate();
@@ -90,10 +93,15 @@ export class SaleListByCustomerComponent implements OnInit {
     return this.filterCurrSales.entities.map(t => t.transferPrice).reduce((acc, value) => acc + value, 0);
   }
 
+  getAvrageOfSalePricePerUnit() {
+    var currencyTypeSales = this.filterCurrSales.entities.filter(x=>x.salePricePerUnit > 0) ;
+    return currencyTypeSales.map(t => t.salePricePerUnit).reduce((acc, value)=>
+       acc + value, 0 ) / currencyTypeSales.length ;
+  }
 
-  // getTotalSoldPrice() {
-  //   return this.filterExDecSales.exDecRemaind.map(t => t.soldPrice).reduce((acc, value) => acc + value, 0);
-  // }
+  getTotalPrice() {
+    return this.filterCurrSales.entities.map(t => t.price).reduce((acc, value) => acc + value, 0);
+  }
   getCurrSaleCustomerList(customerId:number) {
     this.isLoadingData = true;
     this.currencySalesService.getCurrSCustomerDetails(customerId).subscribe(result => {

@@ -8,6 +8,7 @@ export class PiRemaindDto {
     public  totalPrice :number,
     public  soldPrice: number,
     public  remaindPrice: number,
+    public customerName:string
     
   ) {
   }

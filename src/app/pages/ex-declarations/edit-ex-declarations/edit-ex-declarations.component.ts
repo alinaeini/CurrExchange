@@ -29,7 +29,7 @@ export class EditExDeclarationsComponent implements OnInit  {
   ErrorCaractersisMoreThanMax: string = " تعداد کاراکترها نمیتواند بیشتر از حد مجاز باشد";
 
   @ViewChild("sweetAlert") private sweetAlert: SwalComponent;
-  exprireDate: string = "تاریخ اعتبار اظهارنامه";
+  exprireDate: string = "تاریخ اظهارنامه";
 
   constructor(
     private exdecService: ExDeclarationService,
@@ -51,23 +51,33 @@ export class EditExDeclarationsComponent implements OnInit  {
       exprireDate: new FormControl(null, [
         Validators.required,
       ]),
+      description: new FormControl(null, [
+        Validators.required,
+      ]),
 
     });
 
 
+
     this.activatedRoute.queryParams.subscribe((param) => {
       this.exdecService.getExDecById(param.id).subscribe(res=>{
+
+
+        // moment('1989/01/24', 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'); 
+        this.exprireDate =  moment(res.data.expireDate, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'); 
           this.exdecId = res.data.id ;
           this.exdecFrom.controls.exchangeDeclarationCode.setValue(res.data.exCode);
           this.exdecFrom.controls.price.setValue(res.data.price.toLocaleString('en-GB'));
           this.exdecFrom.controls.qty.setValue(res.data.qty);
-          this.exdecFrom.controls.exprireDate.setValue(res.data.expireDate);
+          //this.exdecFrom.controls.exprireDate.setValue(res.data.expireDate);
+          this.exdecFrom.controls.description.setValue(res.data.description);
       });
     });
     
   }
 
   submitExdecForm() {
+    
       this.isLoading=true ;
       if(this.exdecFrom.controls.price.value !== null)
       var price = ex_normalNum(this.exdecFrom.controls.price.value);
@@ -82,6 +92,7 @@ export class EditExDeclarationsComponent implements OnInit  {
         parseInt( price),
         parseInt(this.exdecFrom.controls.qty.value),
         new Date(gregorianDate),
+        this.exdecFrom.controls.description.value
       );
       this.exdecService.editExDec(exDeclaration).subscribe((res) => {
         this.isLoading=false ;

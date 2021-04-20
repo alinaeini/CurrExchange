@@ -20,6 +20,7 @@ import { StimulsoftViewerModule } from 'stimulsoft-viewer-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { MovingCurrencyComponent } from './moving-currency/moving-currency.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { BrowserModule } from '@angular/platform-browser';
     SaleCustomerTotalComponent,
     SaleListByCustomerComponent,
     PrintPageComponent,
+    MovingCurrencyComponent,
     // JalaliPipe
   ],
   imports: [

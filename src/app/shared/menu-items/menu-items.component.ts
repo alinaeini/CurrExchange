@@ -3,6 +3,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthorizationService } from 'src/app/Services/authorization.service';
 import { Router } from '@angular/router';
 import { CurrentUserDto } from 'src/app/DTOs/Account/CurrentUserDto';
+import { FinancialPeriodService } from 'src/app/Services/financial-period.service';
+import { FinancialPeriodDto } from 'src/app/DTOs/Account/FinancialPeriodDto';
 
 @Component({
   selector: 'app-menu-items',
@@ -11,9 +13,11 @@ import { CurrentUserDto } from 'src/app/DTOs/Account/CurrentUserDto';
 })
 export class MenuItemsComponent implements OnInit {
   @Input('currentUser') public currentUser: CurrentUserDto = null;
-  constructor() {}
+@Input ('currentFinancial') public currentFinancial: FinancialPeriodDto = null;
+  constructor( ) {}
 
-  ngOnInit(): void {  
+  ngOnInit() {
+ 
     // alert('menu');
     // this.authService.checkUserAuth().subscribe((res): void => {
     //   if (res.status === "Error") 

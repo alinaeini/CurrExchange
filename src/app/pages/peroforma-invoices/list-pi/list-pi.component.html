@@ -7,7 +7,7 @@
               <font style="vertical-align: inherit"
                 ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
               >
-            </h2>
+            </h2><br>
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="index.html"
@@ -19,7 +19,13 @@
               </li>
               <li class="breadcrumb-item active">
                 <font style="vertical-align: inherit"
-                  ><font style="vertical-align: inherit">لیست پیش فاکتور</font></font
+                  ><font style="vertical-align: inherit">پیش فاکتور (PI)</font></font
+                >
+              </li>
+
+              <li class="breadcrumb-item active">
+                <font style="vertical-align: inherit"
+                  ><font style="vertical-align: inherit"> لیست پیش فاکتور</font></font
                 >
               </li>
             </ul>
@@ -38,40 +44,34 @@
           </div>
         </div>
       </div>
-      <div class="card serch-card" *ngIf="filterPi.piRemaind !== null && filterPi.piRemaind.length > 0 ">
+      <div class="card serch-card">
         <div class="body">
-          <div class="form-group row">
+          <div class=" row">
               <div class="col-2" >
               </div>
-            <mat-form-field class="col-7">
-              <mat-label>جستجو بر اساس  PI....</mat-label>
-              <input persianNumber
-                matInput
-                placeholder="متن خود را وارد کنید "
-                (keyup)="onKey($event)"
-              />
-            </mat-form-field>
-  
-            
-              <button
-                mat-mini-fab
-                color="gray"
-                class="btn btn-primary mb-1 "
-                (click)="searchButton()" >
-                <mat-icon>search</mat-icon>
-              </button>
-           
+
+              <mat-form-field class="col-7">
+                <mat-label>جستجو بر اساس  PI, پرداختی مشتری (درهم) ,مقدار فروش رفته (درهم) ....</mat-label>
+                <input persianNumber
+                  matInput
+                  placeholder="متن خود را وارد کنید "
+                  (keyup)="onKey($event)"
+                />
+              </mat-form-field>
+          </div>
+          <div class="row">
+            <div class="col-2" >
+            </div>
+            <mat-radio-group class="form-group input-group col-7" title="لطفا نوع نمایش پیش فاکتورها را مشخص نمایید" (change)="clickOption($event)" >
+              <mat-radio-button class="form-group col"  checked value="1">فقط مانده دارها</mat-radio-button>&nbsp;&nbsp;
+              <mat-radio-button class="form-group col"   value="2">همه</mat-radio-button>
+            </mat-radio-group>
+            <button mat-mini-fab color="gray" class="btn btn-primary mb-1 margin-top"  (click)="searchButton()">
+              <mat-icon>search</mat-icon>
+            </button>
           </div>
 
-        <!-- <div class="form-group row">
-          <div class="col-2" >
-          </div>
-          <mat-radio-group class="col-7" title="لطفا نوع محاسبه اظهارنامه(ها) رو مشخص کنید"  >
-            <mat-radio-button (change)="clickOption($event)"  value="1">فقط مانده دارها را نمایش بده</mat-radio-button>
-            <mat-radio-button (change)="clickOption($event)" value="2">همه</mat-radio-button>
-          </mat-radio-group>
-         
-        </div> -->
+
           <div class="container-fluid">
             <div class="row clearfix">
               <div class="col-lg-12">
@@ -91,17 +91,30 @@
                         <td mat-footer-cell *matFooterCellDef></td>
                       </ng-container>
 
-                        <!-- piDate Column -->
-                        <ng-container matColumnDef="piDate">
+
+                      <!-- piDate Column -->
+                      <ng-container matColumnDef="piDate">
                         <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
                           تاریخ PI
                         </th>
                         <td mat-cell *matCellDef="let element">
-                          {{ element.piDate | date:'y/MM/dd'}}
+                          {{ element.piDate | date:'y/MM/dd'}} ({{ element.piDate | jalaliPipe }}) 
                         </td>
                         <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container> 
+
+                      <!-- basePrice Column -->
+                      <ng-container matColumnDef="customerName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
+                          نام مشتری
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element.customerName }}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> </td>
                       </ng-container>
-            
+
+
                       <!-- basePrice Column -->
                       <ng-container matColumnDef="basePrice">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header   class="headersort" >
@@ -141,10 +154,17 @@
                         <th mat-header-cell  *matHeaderCellDef  mat-sort-header class="headersort" >
                           مانده (درهم)
                         </th>
-                        <td mat-cell *matCellDef="let element" class="text-danger" >
-                          {{ element.remaindPrice | number}}
+                        <td mat-cell *matCellDef="let element" [ngClass]="{'text-danger' : element.remaindPrice > 0 
+                          ,'color-gray-price' :0 === element.remaindPrice,
+                           'text-success':0 > element.remaindPrice  }" >
+                           <span *ngIf="0 > element.remaindPrice">({{element.remaindPrice *-1 | number}}) درهم</span>
+                           <span *ngIf="element.remaindPrice > 0"> {{ element.remaindPrice | number}} درهم</span>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>{{getTotalRemaind() |number}}</td>
+                        <td mat-footer-cell *matFooterCellDef>
+                          <span *ngIf="0 > getTotalRemaind()">({{getTotalRemaind() *-1 | number}}) درهم </span>
+                          <span *ngIf="getTotalRemaind() > 0"> {{ getTotalRemaind() | number}} درهم</span>
+                          
+                        </td>
                       </ng-container>
                       <!-- operation Column -->
                       <ng-container matColumnDef="operation">
@@ -199,7 +219,7 @@
                         <a class="page-link"><i class="zmdi zmdi-arrow-left"></i></a>
                       </li>
                       <li
-                        class="page-item"   [ngClass]="{ active: page === filterPi.activePage }"   (click)="setPage(page)"   *ngFor="let page of pages">
+                        class="page-item"   [ngClass]="{ active: page === filterPi.activePage }" (click)="setPage(page)"  *ngFor="let page of pages">
                         <a class="page-link" href="javascript:void(0);"><font style="vertical-align: inherit">
                             <font style="vertical-align: inherit">{{  page }}</font></font></a   >
                       </li>
@@ -227,13 +247,13 @@
           </div>
         </div>
       </div>
-      <div class="card serch-card" *ngIf="filterPi.piRemaind === null || filterPi.piRemaind.length === 0">
+      <!-- <div class="card serch-card" *ngIf="filterPi.piRemaind === null || filterPi.piRemaind.length === 0">
           <div class="body">
               <div class="form-group text-center">
                  <h2 class="text-primary">هیچ PI  که مشتری کامل پرداخت نکرده در سیستم وجود ندارد</h2>
               </div>
           </div>
-      </div>
+      </div> -->
     </div>
 
   </section>

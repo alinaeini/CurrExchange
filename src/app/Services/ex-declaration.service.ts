@@ -38,6 +38,11 @@ export class ExDeclarationService {
         .set("pageId", filter.pageId.toString())
         .set("searchText", filter.searchText)
         .set("takeEntity", filter.takeEntity.toString())
+
+        .set("fromDateSale", filter.fromDateSale.toString())
+        .set("toDateSale", filter.toDateSale.toString())
+
+        .set("isRemaindPriceZero", filter.isRemaindPriceZero.toString())
       }
       //console.log('requestParams',requestParams);
     //console.log(JSON.stringify(filter) );
@@ -65,6 +70,8 @@ export class ExDeclarationService {
    } 
 
    editExDec(ExDec: ExDeclarationsDto): Observable<IResponseResult<any>> {
+   //  console.log(JSON.stringify(ExDec));
+     
     return this.http.post<IResponseResult<any>>("/Exdeclaration/edit-exdec",ExDec);
   } 
   

@@ -5,6 +5,10 @@ import { __values } from 'tslib';
 import { ngxLoadingAnimationTypes } from 'ngx-loading';
 import { PiService } from '../../../Services/pi.Service';
 import { CreatePiDto } from '../../../DTOs/Pi/CreatePiDto';
+import { Observable } from 'rxjs';
+import { CustomerDto } from 'src/app/DTOs/Customer/customerDto';
+import { startWith, map } from 'rxjs/operators';
+import { CommodityCustomerService } from '../../../Services/commodity-customer.service';
 
 
 
@@ -22,12 +26,19 @@ export class PeroformaInvoicesComponent implements OnInit {
   isLoading =false;
   isLoadingSuccess =false ;
   timeLeft: number = 4;
+
+  customers: CustomerDto[] = [];
+  customerId: string = '0';
+  filteredOptions: Observable<CustomerDto[]>;
+
+  myControl = new FormControl();
   interval;
 
   @ViewChild("sweetAlert") private sweetAlert: SwalComponent;
   performaInvoiceDate: string = "تاریخ PI";
 
-  constructor(private piService: PiService ) { }
+  constructor(private piService: PiService ,
+              private customerService: CommodityCustomerService) { }
 
   ngOnInit(): void {
     this.piForm = new FormGroup({
@@ -43,14 +54,70 @@ export class PeroformaInvoicesComponent implements OnInit {
       totalPrice: new FormControl(null, [
         Validators.required,
       ]),
+      description: new FormControl(null, [
+        Validators.required,
+      ]),
 
     });
+    this.getCustomers();
+    this.filteredOptions = this.myControl.valueChanges.pipe(startWith(''), map((value) => this._filter(value)) );
+    //console.log(this.filteredOptions);
+    
   }
+
+  
+  private _filter(value: string): CustomerDto[] {
+    const filterValue = value.length > 0 ? value.trim() : '';
+    return this.customers.filter(
+      (option) =>
+        option.title.trim().includes(filterValue) ||
+        option.name.trim().includes(filterValue)
+    );
+  }
+
+
+
+  getCustomers() {
+    this.customerService.getCustomerList().subscribe((customerListResult) => {
+      if (customerListResult != null) {
+        this.customers = customerListResult;
+      } else {
+        this.customerService.getCustomerListService().subscribe((res) => {
+          if (res.status === 'Success') {
+            this.customerService.setCustomerList(res.data);
+            this.customerService.getCustomerList().subscribe((customerList) => {
+              this.customers = customerList;
+            });
+          }
+        });
+      }
+    });
+  }
+
+  
+  getTitle(id: string) {
+    var result = '';
+    if (id !== null && id !== undefined )
+      if(parseInt(id)> 0)
+        if (this.customers !== undefined && this.customers !== null) {
+          this.customerId = id;
+          result = this.customers.find((customer) => customer.id === parseInt(id))
+            .name;
+        }
+        //console.log(result);
+        
+    return result;
+  }
+
   selectedValuesFromPickupDate(shamsiDate: string, gregorianDate: string, timestamp: number){
     this.performaInvoiceDate = gregorianDate ;
   }
-
+  
   submitPiForm() {
+    if (parseInt(this.customerId) === 0) {
+      this.sweetAlert.text = 'مشتری هنوز مشخص نشده است ';
+      this.sweetAlert.fire();
+    }
     this.isLoading=true ;
     if(this.piForm.controls.basePrice.value !== null)
     var basePrice =this.ex_normalNum(this.piForm.controls.basePrice.value);
@@ -67,6 +134,8 @@ export class PeroformaInvoicesComponent implements OnInit {
       new Date(this.piForm.controls.piDate.value),
       parseInt( basePrice),
       parseInt(totalPrice),
+      this.piForm.controls.description.value,
+      parseInt(this.customerId)
     );
     this.piService.createPiService(performaInvoice).subscribe((res) => {
       this.isLoading=false ;

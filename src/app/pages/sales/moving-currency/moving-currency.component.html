@@ -1,0 +1,292 @@
+<section class="content">
+    <div class="body_scroll">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-7 col-md-6 col-sm-12">
+            <h2>
+              <font style="vertical-align: inherit"
+                ><font style="vertical-align: inherit"
+                  >اعتبار سنجی فرم</font
+                ></font
+              >
+            </h2>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a [routerLink]="'/home-user'"
+                  ><i class="zmdi zmdi-home"></i
+                  ><font style="vertical-align: inherit"
+                    ><font style="vertical-align: inherit">
+                      مدیریت فروش ارز</font
+                    ></font
+                  ></a
+                >
+              </li>
+              <li class="breadcrumb-item">
+                <a><font style="vertical-align: inherit"><font style="vertical-align: inherit">ثبت فروش جدید </font></font></a>
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-icon mobile_menu" type="button">
+              <i class="zmdi zmdi-sort-amount-desc"></i>
+            </button>
+          </div>
+          <div class="col-lg-5 col-md-6 col-sm-12">
+            <a class="btn btn-primary btn-icon float-right"    [routerLink]="'/'"  >
+              <i class="zmdi zmdi-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row clearfix" *ngIf="brokers !== null">
+        <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let broker of brokers">
+          <div class="card widget_2 small_icon domains "><div  class="body"><h4 ><font >
+            <strong> {{broker.name}} ({{broker.title}})</strong></font></h4>
+            <h2 _ngcontent-qll-c185=""><font _ngcontent-qll-c185="" style="vertical-align: inherit;">
+              <font _ngcontent-qll-c185="" style="vertical-align: inherit;">{{getPercent(broker.id)}} </font></font>
+              <small _ngcontent-qll-c185="" class="info"><font _ngcontent-qll-c185="" style="vertical-align: inherit;">
+                <font _ngcontent-qll-c185="" style="vertical-align: inherit;">درصد (موجودی فعلی)</font></font></small></h2>
+                <h3 _ngcontent-rmu-c185=""><strong> <font ><font >
+                  <span *ngIf="0 > broker.accountBalance" >موجودی  : ({{broker.accountBalance * -1 |number}}) درهم  </span>
+                  <span *ngIf="broker.accountBalance >= 0"> موجودی  : {{broker.accountBalance |number}} درهم</span>
+                </font></font></strong></h3><div  class="progress"><div  role="progressbar" [class]="this.getPercent(broker.id) > 50  ?  'progress-bar l-blue' : 'progress-bar l-amber'" style.width={{this.getPercent(broker.id)}}%></div></div></div></div></div>
+        <div class="col-lg-4 col-md-6 col-sm-12" ><div class="card widget_2 small_icon domains "><div  class="body"><h3 ><font ><strong> موجودی نزد تمام کارگزاران</strong></font></h3><h2 _ngcontent-qll-c185=""><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"></font></font><small _ngcontent-qll-c185="" class="info"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"><font _ngcontent-qll-c185="" style="vertical-align: inherit;"> 100 درصد</font></font></small></h2><h3 _ngcontent-rmu-c185=""><strong> <font ><font >موجودی کل  : {{sumBrokers() |number}} درهم</font></font></strong></h3><div  class="progress"><div  role="progressbar" class="progress-bar l-green" style="width:100%"></div></div></div></div></div>
+    </div>
+
+  
+      <div class="container-fluid">
+        <!-- Basic Validation -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                <div class="header">
+                    <h2>
+                    <strong><font style="vertical-align: inherit"></font></strong>
+                        <font style="vertical-align: inherit"><font style="vertical-align: inherit">انتقال ارز</font></font>
+                    </h2>
+                </div>
+                    <div class="body">
+                        <div
+                        class="alert alert-success"
+                        role="alert" *ngIf="isLoadingSuccess"  >
+                        انتقال ارز مورد نظر با موفتقیت در سیستم ثبت شد
+                        </div>
+                        <form  [formGroup]="salesForm" (ngSubmit)="submitSaleForm()">
+                            <div class="row clearfix">
+
+                              <div  class="form-group form-float col-md-12"  >
+                                  <mat-radio-group class="form-control" title="لطفا نوع انتقال ارز رو مشخص بفرمایید"  >
+                                      <mat-radio-button (change)="radioChange($event)" checked=true  value="2">انتقال ارز به کارگزار دیگر</mat-radio-button>
+                                      <mat-radio-button (change)="radioChange($event)"  value="3">انتقال ارز به شرکت های متفرقه</mat-radio-button>
+                                      <mat-radio-button (change)="radioChange($event)"  value="4">انتقال ارز به مشتری کالا</mat-radio-button>
+                                  </mat-radio-group>
+                              </div>
+                            </div>
+                             <div class="row clearfix">
+                                <div class="col-md-5" [hidden]="this.currencyMovingType !== '2'" >
+                                    <div class="form-group input-group">
+                                            <select  class="form-control"  formControlName="customerId" [(ngModel)]="MisCustomerOrBrokerOrCommCustomer_Id" >
+                                            <option  value="0">لطفا انتقال ارز از کارگزار مورد نظر را انتخاب کنید</option>
+                                            <option  *ngFor="let item of brokers" [value]="item.id">{{item.title }}</option>
+                                            </select>
+                                    </div>
+                                    <p class="text-danger"
+                                    *ngIf="MisCustomerOrBrokerOrCommCustomer_Id === '0' &&  salesForm.controls.customerId.touched">
+                                    لطفا کارگزار را وارد کنید
+                                     </p>
+                                </div>
+                                <!-- <div class="col-md-2"></div> -->
+                                <div class="col-md-5" [hidden]="this.currencyMovingType !== '3'" >
+                                      <div class="form-group input-group">
+                                              <select  class="form-control"    formControlName="customerId" [(ngModel)]="MisCustomerOrBrokerOrCommCustomer_Id"   >
+                                              <option  value="0">لطفا یکی از شرکتهای متفرقه را انتخاب کنید</option>
+                                              <option  *ngFor="let item of customers" [value]="item.id">{{item.name}} {{item.title}}</option>
+                                              </select>
+                                      </div>
+                                      <p class="text-danger"
+                                          *ngIf="MisCustomerOrBrokerOrCommCustomer_Id === '0' &&  salesForm.controls.customerId.touched">
+                                          لطفا یکی از شرکتهای متفرقه را انتخاب کنید
+                                      </p>
+                                </div>
+
+
+                                <div class="col-md-5" [hidden]="this.currencyMovingType !== '4'" >
+                                  <div class="form-group input-group">
+                                          <select  class="form-control"    formControlName="customerId" [(ngModel)]="MisCustomerOrBrokerOrCommCustomer_Id"   >
+                                          <option  value="0">لطفا یکی از مشتریهای کالا را انتخاب کنید</option>
+                                          <option  *ngFor="let item of commoditycustomers" [value]="item.id">{{item.name}}</option>
+                                          </select>
+                                  </div>
+                                  <p class="text-danger"
+                                      *ngIf="MisCustomerOrBrokerOrCommCustomer_Id === '0' &&  salesForm.controls.customerId.touched">
+                                      لطفا یکی از  مشتریهای کالا را انتخاب کنید
+                                  </p>
+                                </div>
+
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                  </div>
+                                </div>
+                                <div class="col-md-5">
+                                  <div class="form-group form-float input-group">
+                                    <input class="form-control ng-pristine" [(ngModel)]="exprireDate" type="text" 
+                                      placeholder="تاریخ انتقال ارز "  formControlName="saleDate" #datepickerInput/>
+                                      <p class = "text-danger" *ngIf="salesForm.controls.saleDate.errors?.required
+                                      && salesForm.controls.saleDate.touched" >
+                                          لطفا تاریخ انتقال ارز  را وارد کنید
+                                      </p>
+                                  </div>
+
+                                  <ng-persian-datepicker
+                                  [input]="datepickerInput"
+                                  [uiTheme]="'default'"
+                                  [timeEnable]="false"
+                                  [dateFormat]="'jYYYY-jMM-jDD'"
+                                  [dateInitValue] ="true"
+                                  [dateOnSelect] ="selectedValuesFromPickupDate"
+                                  [dateInitValue]="false" >
+                                  </ng-persian-datepicker>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                  <div class="col-md-5">
+                                      <div class="form-group">
+                                          <select  class="form-control" formControlName="brokerId" [(ngModel)]="brokerId" >
+                                          <option  value="0">لطفا کارگزار مقصد را انتخاب کنید</option>
+                                          <option  *ngFor="let item of brokers" [value]="item.id">{{item.title }}</option>
+                                          </select>
+                                      </div>
+                                      <p class="text-danger"
+                                          *ngIf="brokerId === '0' &&  salesForm.controls.brokerId.touched">
+                                          لطفا کارگزار را وارد کنید
+                                      </p>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <div class="form-group"></div>
+                                  </div>
+                                  <div class="col-md-5">
+                                      <div class="form-group ">
+                                          <select  class="form-control" formControlName="transferType" [(ngModel)]="TransferType"  >
+                                              <option  value='0' >لطفا نوع پرداخت را مشخص کنید</option>
+                                              <option  value='1'>نقدی</option>
+                                              <option  value='2'>تو حسابی</option>
+                                          </select>
+                                      </div>
+                                      <p class="text-danger"
+                                      *ngIf="TransferType === '0' && salesForm.controls.transferType.errors?.required ">
+                                          لطفا نوع پرداخت را مشخص کنید  
+                                      </p>
+                                </div>
+                            </div> 
+                   
+                                <div class="row clearfix">
+                               
+
+                                
+                  
+
+                                  <!-- <div class="col-md-5">
+                                    <div class="form-group form-float input-group">
+                                      <input type="text" class="form-control" onkeyup="separateNum(this.value,this);"
+                                      placeholder="نرخ پایه درهم فروش رفته"  formControlName="salePricePerUnit">
+                                      <span class="input-group-text">ریال</span>
+                                    </div>
+                                    <p class = "text-danger" *ngIf="salesForm.controls.salePricePerUnit.errors?.required
+                                        && salesForm.controls.salePricePerUnit.touched" >
+                                      لطفا نرخ پایه درهم فروش رفته را وارد کنید
+                                    </p>
+                                  </div> -->
+                               </div>
+
+
+
+                          <div class="row clearfix">
+                            <div class="col-md-5">
+                              <div class="form-group form-float input-group">
+                                <input type="text" class="form-control" onkeyup="separateNum(this.value,this);" 
+                                      placeholder="مقدار درهم قابل انتقال"  formControlName="salePrice">
+                                <span class="input-group-text">درهم</span>
+                                <button type="button" (click) ="fillTransferPrice()" mat-icon-button  >
+                                  <mat-icon>cached</mat-icon>
+                                </button>
+
+                         
+                              </div>
+                              <p class = "text-danger" *ngIf="salesForm.controls.salePrice.errors?.required
+                                  && salesForm.controls.salePrice.touched" >
+                                لطفا مقدار درهم قابل انتقال را وارد کنید
+                              </p>
+                            </div>
+  
+                            <div class="col-md-2">
+                                <div class="form-group">
+                            </div>
+                            </div>
+                            <div class="col-md-5">
+                              <div class="form-group form-float input-group disabled">
+                                <input type="text" class="form-control"  onkeyup="separateNum(this.value,this);"  formControlName="transferPrice"  [value]="transferPrice | number:'1.0-0'"
+                                  placeholder="نرخ کارمزر" title="نرخ کارمزر"  >
+                                <span class="input-group-text" >درهم</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group form-float">
+                            <textarea name="description" cols="30" rows="5" placeholder="توضیحات" class="form-control no-resize" 
+                            formControlName="description"></textarea>
+                          </div>
+                            <p class = "text-danger" *ngIf="salesForm.controls.description.errors?.required
+                              && salesForm.controls.description.touched" >
+                                  لطفا توضیحات  را وارد کنید
+                            </p>
+                            <p class = "text-danger" *ngIf="salesForm.controls.description.errors?.maxlength
+                                && salesForm.controls.description.touched" >
+                                        {{ErrorCaractersisMoreThanMax}}
+                            </p>
+                          <button class="btn  btn-primary waves-effect btn-block"   [disabled]="salesForm.invalid" type="submit" id="submit"  >
+                          <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">  ثبت </font></font> 
+                          </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<ngx-loading [show]="isLoading" [config]="{animationType: ngxLoadingAnimationTypes.wanderingCubes}"></ngx-loading>
+
+<swal #sweetAlert
+title="خطا"
+text=""
+icon="error"
+Height="20px"
+Width="30px"
+confirmButtonText = "قبول"
+[showCancelButton]="false"
+[focusCancel]="false">
+</swal>
+
+
+<swal #sweetAlert_Success
+title="موفقیت"
+text=""
+icon="info"
+Height="20px"
+Width="30px"
+confirmButtonText = "قبول"
+[showCancelButton]="false"
+[focusCancel]="false">
+</swal>
+
+<swal
+#sweetAlert_Warning
+title="سوال"
+text="آیا از انتقال ارز مطمئن هستید ؟"
+icon="warning"
+Height="20px"
+Width="30px"
+confirmButtonText="بلی"
+cancelButtonText="خیر"
+[showCancelButton]="true"
+>
+</swal>

@@ -37,10 +37,17 @@
                         && loginForm.controls.password.touched" >
                         {{ErrorCaractersisMoreThanMax}}
                     </p>
-
-
+                    <div class="form-group  mb-3">
+                      <select  class="form-control" formControlName="financialId" [(ngModel)]="financialPeriodId"  >
+                        <option  *ngFor="let item of financial" [value]="item.financialPeriodId">{{item.priodName }}</option>
+                      </select>
+                  </div>
+                  <p class="text-danger"
+                  *ngIf="financialPeriodId === '0' && loginForm.controls.financialId.touched">
+                       لطفا دوره مالی پیش فرض را وارد کنید  
+                  </p>
                     <div class="input-group  mb-3">
-                       <button class="btn btn-primary bold btn-lg btn-block" [disabled]="loginForm.invalid" id="submit" type="submit"  tabindex="7" id="submit">
+                       <button class="btn btn-primary bold btn-lg btn-block" [disabled]="loginForm.invalid || financial===null" id="submit" type="submit"  tabindex="7" id="submit">
                             ورود
                         </button>
                      </div>

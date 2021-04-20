@@ -20,6 +20,7 @@ import * as moment from 'jalali-moment';
 import { CurrencySalesService } from '../../Services/currency-sales.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { DomainName } from 'src/app/Utilities/pathTools';
+import { CurrencyType } from 'src/app/DTOs/Sale/CurrencyType';
 
 @Component({
   selector: 'app-sales',
@@ -50,6 +51,8 @@ export class SalesComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('sweetAlert') private sweetAlert: SwalComponent;
+  @ViewChild('sweetAlert_Success') private sweetAlert_Success: SwalComponent;
+  @ViewChild('sweetAlert_Warning') private sweetAlert_Warning: SwalComponent;
   exprireDate: string = 'تاریخ فروش ';
   filteredOptions: Observable<CustomerDto[]>;
   filteredOptionsExdec: Observable<ExDecRemaindDto[]>;
@@ -59,7 +62,7 @@ export class SalesComponent implements OnInit {
   exdecId: number = 0;
   exdecCode: string = '';
   exdecPrice: number = 0;
-  balancePercent:number=0;
+  balancePercent: number = 0;
   myControl = new FormControl();
   exDecControl = new FormControl('', Validators.required);
 
@@ -71,7 +74,7 @@ export class SalesComponent implements OnInit {
     private customerService: CustomerService,
     private brokerService: BrokerService,
     private exdecService: ExDeclarationService,
-    private saleService:CurrencySalesService
+    private saleService: CurrencySalesService
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +84,7 @@ export class SalesComponent implements OnInit {
       salePricePerUnit: new FormControl(null, [Validators.required]),
       brokerId: new FormControl(null, [Validators.required]),
       transferType: new FormControl(null, [Validators.required]),
-      transferPrice: new FormControl(null, [Validators.required]),
+      transferPrice: new FormControl(null),
       description: new FormControl('ندارد', [Validators.required]),
     });
 
@@ -106,36 +109,35 @@ export class SalesComponent implements OnInit {
     // });
     this.getBroker();
 
-this.getCustomers()
+    this.getCustomers();
     // this.exdecService.getExDecList().subscribe((exDecListResult) => {
     //   if (exDecListResult != null) {
     //     this.exDecs = exDecListResult;
     //   } else {
-      this.getExDecIsNotSoldwithObservable();
-      // }
+    this.getExDecIsNotSoldwithObservable();
+    // }
     // });
+
     this.filteredOptionsExdec = this.exDecControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filterExdec(value))
     );
 
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value))
-    );
+    this.filteredOptions = this.myControl.valueChanges.pipe( startWith(''),   map((value) => this._filter(value))   );
   }
   getBroker() {
-    this.brokers=[];
-        this.brokerService.getBrokerListService().subscribe((res) => {
-          if (res.status === 'Success') {
-            this.brokerService.setBrokerList(res.data);
-            this.brokerService.getBrokerList().subscribe((brokerList) => {
-              this.brokers = brokerList;
-            });
-          }
-        });
+    this.brokers = [];
+    this.brokerService.getBrokerListService().subscribe((res) => {
+      // console.log(res);
 
-}
+      if (res.status === 'Success') {
+        this.brokerService.setBrokerList(res.data);
+        this.brokerService.getBrokerList().subscribe((brokerList) => {
+          this.brokers = brokerList;
+        });
+      }
+    });
+  }
   getCustomers() {
     this.customerService.getCustomerList().subscribe((customerListResult) => {
       if (customerListResult != null) {
@@ -167,13 +169,14 @@ this.getCustomers()
     return this.exDecs.filter((option) => option.exCode.includes(filterValue));
   }
 
-  sumBrokers(){
-   return  this.brokers
-    .map((t) => t.accountBalance)
-    .reduce((acc, value) => acc + value, 0);
+  sumBrokers() {
+    return this.brokers
+      .map((t) => t.accountBalance)
+      .reduce((acc, value) => acc + value, 0);
   }
-  getPercent(id):number{
-    var amountBalanceBroker = this.brokers.filter(x=>x.id==id)[0].accountBalance;
+  getPercent(id): number {
+    var amountBalanceBroker = this.brokers.filter((x) => x.id == id)[0]
+      .accountBalance;
     return Math.round((amountBalanceBroker * 100) / this.sumBrokers());
   }
   radioChange(event) {
@@ -192,12 +195,15 @@ this.getCustomers()
 
   getTitle(id: string) {
     var result = '';
-    if (id !== null && id !== undefined && id.toString().length > 0)
-      if (this.customers !== undefined && this.customers !== null) {
-        this.customerId = id;
-        result = this.customers.find((customer) => customer.id === parseInt(id))
-          .name;
-      }
+    if (id !== null && id !== undefined )
+      if(parseInt(id)> 0)
+        if (this.customers !== undefined && this.customers !== null) {
+          this.customerId = id;
+          result = this.customers.find((customer) => customer.id === parseInt(id))
+            .name;
+        }
+        //console.log(result);
+        
     return result;
   }
 
@@ -206,18 +212,22 @@ this.getCustomers()
     if (id !== null && id !== undefined && id.toString().length > 0)
       if (this.exDecs !== undefined && this.exDecs !== null) {
         this.exdecId = parseInt(id);
-        this.exdecCode = this.exDecs.find(
-          (exDecs) => exDecs.id === parseInt(id)
-        ).exCode;
-        this.exdecPrice = this.exDecs.find(
-          (exDecs) => exDecs.id === parseInt(id)
-        ).remaindPrice;
-        result = this.exDecs.find((exDecs) => exDecs.id === parseInt(id))
-          .exCode;
+        this.exdecCode = this.exDecs.find((exDecs) => exDecs.id === parseInt(id)).exCode;
+        this.exdecPrice = this.exDecs.find((exDecs) => exDecs.id === parseInt(id)).remaindPrice;
+        result = this.exDecs.find((exDecs) => exDecs.id === parseInt(id)).exCode;
+
+        var salePrice = this.ex_normalNum( this.salesForm.controls.salePrice.value);
+        var totalSelectedExdec = this.getTotalPrice() === NaN || this.getTotalPrice() === null ? 0 : this.getTotalPrice();
+        // console.log(
+        //   this.salesForm.controls.salePrice.value,
+        //   totalSelectedExdec,
+        //   this.exdecPrice
+        // );
+
+        var priceToRemaind = parseInt(salePrice) - totalSelectedExdec;
+        if (priceToRemaind > this.exdecPrice) priceToRemaind = this.exdecPrice;
         this.exDecForm.controls.price.setValue(
-          this.exDecs
-            .find((exDecs) => exDecs.id === parseInt(id))
-            .remaindPrice.toLocaleString('en-GB')
+          priceToRemaind.toLocaleString('en-GB')
         );
         // this.exdecId = this.exDecs.find((exDecs) => exDecs.id === parseInt(id)).id ;
       }
@@ -225,75 +235,98 @@ this.getCustomers()
   }
 
   getTotalPrice() {
-    return this.exDecsExport
-      .map((t) => t.price)
-      .reduce((acc, value) => acc + value, 0);
+    return this.exDecsExport.map((t) => t.price).reduce((acc, value) => acc + value, 0);
   }
 
   fillTransferPrice() {
-    // console.log(this.brokers);
-    if (this.salesForm.controls.salePrice.value !== null && this.brokers!== undefined ) {
-      var salePrice = this.ex_normalNum(this.salesForm.controls.salePrice.value);
-      var brokerSelected = this.brokers.filter((x) => x.id == parseInt(this.brokerId))[0];
-      
-      if(this.transferPrice === 0)
-        if(this.TransferType )
-        {
-            switch (this.TransferType) 
-            {
-              case '1':
-                this.transferPrice =
-                  parseInt(salePrice) * brokerSelected.serviceChargeCash;
-                break;
-                
-              case '2':
-                this.transferPrice =
-                  parseInt(salePrice) * brokerSelected.serviceChargeAccount;
-                break;
+    
+    if (parseInt(this.brokerId) > 0  && parseInt(this.TransferType) > 0  &&  this.salesForm.controls.salePrice.value !== null &&  this.brokers !== undefined  ) {
+      var salePrice = this.ex_normalNum( this.salesForm.controls.salePrice.value );
+      // console.log(salePrice);
+      var brokerSelected = this.brokers.filter(    (x) => x.id == parseInt(this.brokerId) )[0];
+      if (parseInt(this.TransferType) !== 0) {
+        switch (this.TransferType) {
+          case '1':
+            this.transferPrice =
+              parseInt(salePrice) * brokerSelected.serviceChargeCash;
+            break;
 
-            }
+          case '2':
+            this.transferPrice =
+              parseInt(salePrice) * brokerSelected.serviceChargeAccount;
+            break;
         }
-        // console.log(this.transferPrice);
       }
+      
+    }
+    else{
+      this.transferPrice = 0;
+      this.sweetAlert.text = ' مشخص کردن کارگزار و نحوه پرداخت  قبل از محاسبه کارمزد الزامی است';
+      this.sweetAlert.fire();
+    }
+    this.salesForm.controls.transferPrice.setValue(this.transferPrice.toLocaleString('en-GB'));
   }
+  
   submitSaleForm() {
-    var validation =true ;
-    //#region  Validations 
-
-    var brokerSelected = this.brokers.filter((x) => x.id == parseInt(this.brokerId))[0];
+    var validation = true;
+    //#region  Validations
+    if (parseInt(this.TransferType) === 0) {
+      validation = false;
+      this.sweetAlert.text = 'لطفا نوع پرداخت ارز را مشخص بفرمایید';
+      this.sweetAlert.fire();
+    }
+    var brokerSelected = this.brokers.filter(
+      (x) => x.id == parseInt(this.brokerId)
+    )[0];
     if (this.salesForm.controls.salePrice.value !== null)
-      var salePrice = this.ex_normalNum(this.salesForm.controls.salePrice.value);
+      var salePrice = this.ex_normalNum(
+        this.salesForm.controls.salePrice.value
+      );
     else var salePrice = '0';
 
     if (this.salesForm.controls.salePricePerUnit.value !== null)
-      var salePricePerUnit = this.ex_normalNum(this.salesForm.controls.salePricePerUnit.value);
+      var salePricePerUnit = this.ex_normalNum(
+        this.salesForm.controls.salePricePerUnit.value
+      );
+    else var salePricePerUnit = '0';
+
+    if (this.salesForm.controls.transferPrice.value !== null)
+    {
+      var transferPrice = this.ex_normalNum(this.salesForm.controls.transferPrice.value );
+      this.transferPrice = parseInt(transferPrice) ;
+    }
     else 
-      var salePricePerUnit = '0';
+    this.transferPrice = 0;
 
-    this.fillTransferPrice();
+    if (Math.round(this.transferPrice) === 0 ) 
+    {
+      validation = false;
+      this.sweetAlert.text = 'مقدار کارمزد انتخاب نشده است';
+      this.sweetAlert.fire();
+    }
 
-    if (parseInt(salePrice) + this.transferPrice > brokerSelected.accountBalance) {
-      validation=false;
-      this.sweetAlert.text =
-        'مقدار وارد شده بهمراه کارمزد از کل موجودی بیشتر میباشد';
+
+    if ( parseInt(salePrice) + this.transferPrice > brokerSelected.accountBalance) 
+    {
+      validation = false;
+      this.sweetAlert.text = 'مقدار وارد شده بهمراه کارمزد از کل موجودی بیشتر میباشد';
       this.sweetAlert.fire();
     }
 
     if (!this.hiddenMatAccordion && this.exDecsExport.length === 0) {
-      validation=false;
+      validation = false;
       this.sweetAlert.text = 'مقادیر اظهارنامه بصورت دستی وارد نشده است';
       this.sweetAlert.fire();
     }
 
     if (!this.hiddenMatAccordion) {
       if (this.exDecsExport.length === 0) {
-        validation=false;
+        validation = false;
         this.sweetAlert.text = 'مقادیر اظهارنامه بصورت دستی وارد نشده است';
         this.sweetAlert.fire();
-      } 
-      else {
+      } else {
         if (parseInt(salePrice) !== this.getTotalPrice()) {
-          validation=false;
+          validation = false;
           this.sweetAlert.text =
             'مقادیر اظهارنامه با مقدار درهم فروش برابر نیست . ';
           this.sweetAlert.fire();
@@ -302,51 +335,74 @@ this.getCustomers()
     }
 
     if (parseInt(this.customerId) === 0) {
-      validation=false;
-      this.sweetAlert.text =
-      'مشتری هنوز مشخص نشده است ';
-    this.sweetAlert.fire();
+      validation = false;
+      this.sweetAlert.text = 'مشتری هنوز مشخص نشده است ';
+      this.sweetAlert.fire();
     }
-    //#endregion
-    if(validation){
-      this.isLoading = true;
-      var m = moment(this.exprireDate, 'jYYYY/jMM/jDD');
-      var gregorianDate = m.locale('en').format('YYYY-MM-DD');
 
-      var salesDto = new CreateSaleDto(
-        new Date(gregorianDate),
-        parseInt(salePrice),
-        parseInt(salePricePerUnit),
-        parseInt(this.TransferType),
-        this.transferPrice,
-        this.salesForm.controls.description.value,
-        parseInt(this.brokerId),
-        parseInt(this.customerId),
-        this.exDecsExport);
-        this.saleService.createCurrencySalesService(salesDto).subscribe((res) => {
-          this.isLoading=false ;
-          if (res.status === "Success")
-          this.getBroker();
-            this.LoadingSuccess() ;
-            this.exDecsExport=[];
-            this.exdecCode = '';
-            this.exDecControl.reset();
-            this.exDecForm.reset();
-            this.salesForm.reset();
-            this.transferPrice =0;
-          if (res.status === "Error") {
-            this.sweetAlert.text= res.data.info;
-            this.sweetAlert.fire();
-          }
+    //#endregion
+    if (validation) {
+      this.sweetAlert_Warning.fire().then((result) => {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          var m = moment(this.exprireDate, 'jYYYY/jMM/jDD');
+          var gregorianDate = m.locale('en').format('YYYY-MM-DD');
+
+          var salesDto = new CreateSaleDto(
+            new Date(gregorianDate),
+            parseInt(salePrice),
+            parseInt(salePricePerUnit),
+            parseInt(this.TransferType),
+            Math.round(this.transferPrice),
+            this.salesForm.controls.description.value,
+            parseInt(this.brokerId),
+            parseInt(this.customerId),
+            CurrencyType.CarrencySales,
+            this.exDecsExport
+          );
+
+          // console.log(JSON.stringify(salesDto));
+
+          this.saleService
+            .createCurrencySalesService(salesDto)
+            .subscribe((res) => {
+              this.isLoading = false;
+              if (res.status === 'Success') {
+                this.clearForm();
+                this.sweetAlert_Success.text = 'عملیات با موفقیت انجام شد';
+                this.sweetAlert_Success.fire();
+              }
+              if (res.status === 'Error') {
+                this.sweetAlert.text = res.data.info;
+                this.sweetAlert.fire();
+              }
+            });
+        }
       });
     }
   }
-
+clearForm(){
+  this.getBroker();
+  this.getExDecIsNotSoldwithObservable();
+  this.LoadingSuccess();
+  this.exDecsExport = [];
+  this.dataSource = new MatTableDataSource(this.exDecsExport);
+  this.exdecCode = '';
+  this.exDecControl.reset();
+  this.exDecForm.reset();
+  this.salesForm.reset();
+  this.transferPrice = 0;
+  this.brokerId="0";
+  this.TransferType="0" ;
+  this.customerId = '0';
+  this.getTitle(this.customerId);
+  this.salesForm.controls.description.setValue("ندارد");
+}
   submitExForm() {
     this.isLoading = true;
-    if (this.exDecForm.controls.price.value !== null)
+    if (this.exDecForm.controls.price.value !== null) {
       var price = this.ex_normalNum(this.exDecForm.controls.price.value);
-    else var price = '0';
+    } else var price = '0';
     // console.log("price => ", this.exDecForm.controls.price.value);
 
     // if (parseInt(price) > this.exdecPrice) {
@@ -354,6 +410,7 @@ this.getCustomers()
     //     'مقدار وارد شده از مانده مبلغ اظهارنامه بیشتر میباشد';
     //   this.sweetAlert.fire();
     // }
+
     var exDeclaration = new ExDecExport(
       this.exdecId,
       this.exdecCode,
@@ -408,18 +465,15 @@ this.getCustomers()
     }, 1000);
   }
 
- 
-
-getExDecIsNotSoldwithObservable() {
-  this.exDecs =[];
-  this.exdecService.getExDecListService().subscribe((res) => {
-    if (res.status === 'Success') {
-      this.exdecService.setExDecList(res.data);
-      this.exdecService.getExDecList().subscribe((exDecList) => {
-        this.exDecs = exDecList;
-      });
-    }
-  });
-}
-
+  getExDecIsNotSoldwithObservable() {
+    this.exDecs = [];
+    this.exdecService.getExDecListService().subscribe((res) => {
+      if (res.status === 'Success') {
+        this.exdecService.setExDecList(res.data);
+        this.exdecService.getExDecList().subscribe((exDecList) => {
+          this.exDecs = exDecList;
+        });
+      }
+    });
+  }
 }

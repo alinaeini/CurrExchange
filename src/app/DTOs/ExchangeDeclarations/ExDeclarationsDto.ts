@@ -4,7 +4,8 @@ export class ExDeclarationsDto {
     public exCode: string,
     public price: number,
     public qty: number ,
-    public expireDate:Date 
+    public expireDate:Date ,
+    public description:string
       )
       {
 
